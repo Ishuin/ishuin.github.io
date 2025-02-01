@@ -1,105 +1,35 @@
-/* styles.css */
+/* landing.css */
 body {
-    font-family: Arial, sans-serif;
-    color: white;
-    background-color: #121212;
+    background-color: #f4f4f9;
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
     margin: 0;
-    padding: 0;
 }
 
-.container {
-    width: 90%;
-    max-width: 800px;
-    margin: 0 auto;
+.landing-container {
+    text-align: center;
     padding: 20px;
 }
 
-header {
-    text-align: center;
-    margin-bottom: 40px;
+.landing-container h1 {
+    margin-bottom: 20px;
 }
 
-h1 {
-    font-size: 2.5em;
-    margin: 0;
-}
-
-.tagline {
+.button {
+    display: inline-block;
+    padding: 15px 30px;
+    margin: 10px;
     font-size: 1.2em;
-    color: #bbb;
-}
-
-nav {
-    background-color: #1c1c1c;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 20px;
-}
-
-nav ul {
-    list-style: none;
-    padding: 0;
-}
-
-nav li {
-    display: inline;
-    margin: 0 15px;
-}
-
-nav a {
-    color: #fff;
-    text-decoration: none;
-}
-
-nav a:hover {
-    text-decoration: underline;
-}
-
-section {
-    margin-bottom: 40px;
-}
-
-h2 {
-    border-bottom: 2px solid #38a169;
-    padding-bottom: 5px;
-}
-
-.experience-item, .education-item {
-    margin-bottom: 20px;
-}
-
-.submit-button, .edit-button, .delete-button, .cancel-button, .accept-button {
-    margin-top: 10px;
-    padding: 10px 15px;
     color: white;
-    border: none;
+    background-color: #3498db;
+    text-decoration: none;
     border-radius: 5px;
-    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-.delete-button {
-    background-color: #f44336; /* Red */
+.button:hover {
+    background-color: #2980b9; /* Darker blue on hover */
 }
-
-.edit-button {
-    background-color: #4CAF50; /* Green */
-}
-
-.submit-button {
-    background-color: #38a169; /* Green */
-/* Add additional styling to unify them with dialog buttons, if necessary */
-}
-
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-}
-
-/* Add additional styling for modal and buttons as outlined previously */

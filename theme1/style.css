@@ -1,0 +1,264 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background-color: #1a1b23;
+    color: white;
+    line-height: 1.5;
+  }
+  
+  .container {
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  /* Sidebar Styles */
+  .sidebar {
+    position: fixed;
+    width: 288px;
+    height: 100vh;
+    padding: 2rem;
+    border-right: 1px solid #2a2b33;
+    overflow-y: auto;
+  }
+  
+  .profile {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .profile-img {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+  }
+  
+  .text-gray {
+    color: #9ca3af;
+  }
+  
+  .info {
+    margin-bottom: 2rem;
+  }
+  
+  .info-item {
+    margin-bottom: 1rem;
+  }
+  
+  .languages {
+    margin-bottom: 2rem;
+  }
+  
+  .language {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .circle {
+    width: 48px;
+    height: 48px;
+    background-color: #ffd700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    font-weight: bold;
+  }
+  
+  .skills {
+    margin-bottom: 2rem;
+  }
+  
+  .skill {
+    margin-bottom: 1rem;
+  }
+  
+  .skill-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+  
+  .progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: #2a2b33;
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+  
+  .progress {
+    height: 100%;
+    background-color: #ffd700;
+    border-radius: 9999px;
+  }
+  
+  .download-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #ffd700;
+    color: black;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .download-btn:hover {
+    background-color: #e6c200;
+  }
+  
+  /* Main Content Styles */
+  .main-content {
+    margin-left: 288px;
+    padding: 2rem;
+    max-width: 1024px;
+  }
+  
+  .hero {
+    margin-bottom: 3rem;
+  }
+  
+  .hero h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  .code-line {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #ffd700;
+    margin-bottom: 2rem;
+  }
+  
+  .explore-btn {
+    background-color: #ffd700;
+    color: black;
+    padding: 0.5rem 1.5rem;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+  
+  .explore-btn:hover {
+    background-color: #e6c200;
+  }
+  
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+  
+  .stat h3 {
+    font-size: 1.875rem;
+    font-weight: bold;
+    color: #ffd700;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+  }
+  
+  .services {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+  
+  .service {
+    background-color: #2a2b33;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+  }
+  
+  .service h3 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  .service p {
+    color: #9ca3af;
+    margin-bottom: 1rem;
+  }
+  
+  .service button {
+    background: none;
+    border: none;
+    color: #ffd700;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  
+  .service button:hover {
+    color: #e6c200;
+  }
+  
+  .social {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .social-icon {
+    color: #9ca3af;
+    transition: color 0.3s;
+  }
+  
+  .social-icon:hover {
+    color: #ffd700;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .services {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      flex-direction: column;
+    }
+  
+    .sidebar {
+      position: static;
+      width: 100%;
+      height: auto;
+      border-right: none;
+      border-bottom: 1px solid #2a2b33;
+    }
+  
+    .main-content {
+      margin-left: 0;
+    }
+  
+    .stats {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  
+    .services {
+      grid-template-columns: 1fr;
+    }
+  }
