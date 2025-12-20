@@ -24,7 +24,7 @@
   
   .container {
     min-height: 100vh;
-    background: linear-gradient(135deg, #0080ff 0%, #00bfff 100%);
+    background: linear-gradient(135deg, var(--primary-color) 0%, #00bfff 100%);
   }
   
   /* Navbar Styles */
@@ -75,10 +75,6 @@
   .nav-links a:hover,
   .nav-links a.active {
     color: var(--primary-color);
-  }
-  
-  .menu-toggle {
-    display: none;
   }
   
   /* Content Styles */
