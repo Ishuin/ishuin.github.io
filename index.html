@@ -1,57 +1,737 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <title>Select a Resume Style</title>
+    <title>Ishu Kumar | Technical Lead & Systems Architect</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Feather Icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Markdown Parser (for AI responses) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
     <style>
+        :root {
+            --bg-body: #050505;
+            --bg-card: #0a0a0a;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-main: #ededed;
+            --text-muted: #a1a1aa;
+            --accent-blue: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.15);
+        }
+
         body {
-            background-color: #f4f4f9;
-            font-family: 'Roboto', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            selection-background-color: var(--accent-blue);
+            selection-color: white;
+        }
+
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* --- Ambient Background --- */
+        .ambient-glow {
+            position: fixed;
+            width: 100vw;
             height: 100vh;
-            margin: 0;
+            top: 0;
+            left: 0;
+            background: 
+                radial-gradient(circle at 15% 50%, rgba(56, 189, 248, 0.08), transparent 25%), 
+                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.08), transparent 25%);
+            z-index: -1;
+            pointer-events: none;
         }
-        .landing-container {
-            text-align: center;
+
+        .grid-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+            -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+            z-index: -1;
+            opacity: 0.6;
         }
-        .landing-container h1 {
-            margin-bottom: 20px;
+
+        /* --- Glass Navigation --- */
+        .glass-nav {
+            background: rgba(5, 5, 5, 0.7);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
         }
-        .button {
-            display: inline-block;
-            padding: 15px 30px;
-            margin: 10px;
-            font-size: 1.2em;
-            color: white;
-            background-color: #3498db;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+
+        /* --- Spotlight Card Effect --- */
+        .spotlight-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s;
         }
-        .button:hover {
-            background-color: #2980b9; /* Darker blue on hover */
+
+        .spotlight-card::before {
+            content: '';
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            top: 0; left: 0;
+            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
         }
+
+        .spotlight-card:hover::before {
+            opacity: 1;
+        }
+        
+        .spotlight-card:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* --- Typography & Utilities --- */
+        .text-gradient {
+            background: linear-gradient(to right, #ffffff, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-title {
+            font-size: 0.875rem; /* text-sm */
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .section-title::after {
+            content: '';
+            height: 1px;
+            flex-grow: 1;
+            background: linear-gradient(to right, var(--border-color), transparent);
+        }
+
+        /* Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Terminal / AI Chat Styles --- */
+        .terminal-window {
+            background: #0d0d0d;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.5);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .terminal-header {
+            background: #1a1a1a;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 6px;
+        }
+        .dot { width: 10px; height: 10px; rounded: 50%; border-radius: 50%; }
+        .dot-red { background: #ef4444; }
+        .dot-yellow { background: #f59e0b; }
+        .dot-green { background: #10b981; }
+
+        .chat-message {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            font-size: 0.875rem;
+        }
+        .chat-user { color: #3b82f6; font-weight: bold; }
+        .chat-ai { color: #a1a1aa; }
+        
+        .blinking-cursor::after {
+            content: '▋';
+            animation: blink 1s step-end infinite;
+            color: #3b82f6;
+            margin-left: 2px;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* Loader */
+        .loader {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+        .loader span {
+            width: 4px;
+            height: 4px;
+            background: #a1a1aa;
+            border-radius: 50%;
+            animation: bounce 0.6s infinite alternate;
+        }
+        .loader span:nth-child(2) { animation-delay: 0.2s; }
+        .loader span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes bounce { to { transform: translateY(-4px); } }
+
     </style>
 </head>
-
 <body>
-    <div class="landing-container">
-        <h1>Select a Resume Style</h1>
-        <a href="theme1/index.html" class="button">Theme 1</a>
-        <a href="theme2/index.html" class="button">Theme 2</a>
-        <a href="theme3/index.html" class="button">Theme 3</a>
-        <a href="theme4/index.html" class="button">Theme 4</a>
-        <a href="theme5/index.html" class="button">Theme 5</a>
-        <a href="theme6/index.html" class="button">Theme 6</a>
-        <a href="theme7/index.html" class="button">Theme 7</a>
-        <a href="theme8/wp/leven-wp/home.html" class="button">Theme 8</a>
-        <a href="theme9/index.html" class="button">Theme 9</a>
-        <!-- Add more styles as needed -->
+
+    <!-- Ambient Layers -->
+    <div class="ambient-glow"></div>
+    <div class="grid-bg"></div>
+
+    <!-- Navigation -->
+    <nav class="glass-nav fixed top-0 w-full z-50">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="#" class="font-mono font-bold text-white tracking-tighter text-lg hover:text-blue-400 transition-colors">
+                IK<span class="text-gray-600">_SYS</span>
+            </a>
+            
+            <div class="hidden md:flex gap-8 text-sm font-medium text-gray-400">
+                <a href="#about" class="hover:text-white transition-colors">Philosophy</a>
+                <a href="#work" class="hover:text-white transition-colors">Selected Work</a>
+                <a href="#ai-lab" class="hover:text-blue-400 transition-colors flex items-center gap-1">
+                    <i data-feather="cpu" class="w-3 h-3"></i> AI Lab
+                </a>
+                <a href="#oss" class="hover:text-white transition-colors">Open Source</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <a href="https://github.com/Ishuin" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                    <i data-feather="github" class="w-5 h-5"></i>
+                </a>
+                <a href="https://linkedin.com/in/ishukumars" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                    <i data-feather="linkedin" class="w-5 h-5"></i>
+                </a>
+                <a href="Ishu_Resume_2026.pdf" download class="hidden sm:flex items-center gap-2 px-4 py-1.5 rounded-md bg-white text-black text-xs font-bold tracking-wide hover:bg-gray-200 transition-colors">
+                    RESUME
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="pt-40 pb-32 px-6 max-w-6xl mx-auto">
+        <div class="max-w-4xl">
+            <div class="reveal inline-flex items-center gap-2 px-3 py-1 rounded-full border border-green-900/30 bg-green-900/10 text-green-400 text-xs font-mono mb-8">
+                <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                System Status: Operational
+            </div>
+
+            <h1 class="reveal text-6xl md:text-8xl font-bold tracking-tighter text-white mb-4">
+                Ishu Kumar
+            </h1>
+
+            <h2 class="reveal text-4xl md:text-6xl font-bold tracking-tight text-gray-300 leading-[1.1] mb-8">
+                Building the systems that <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">power intelligence.</span>
+            </h2>
+
+            <p class="reveal text-xl text-gray-400 max-w-2xl leading-relaxed mb-12">
+                I am a <strong>Technical Lead & Backend Architect</strong> who turns complex ideas into production-grade infrastructure. 
+                Currently focused on bridging the gap between <span class="text-white">Distributed Cloud Systems</span> and <span class="text-white">Agentic AI</span>.
+            </p>
+
+            <div class="reveal flex flex-wrap gap-4">
+                <a href="#ai-lab" class="group px-6 py-3 rounded-lg bg-blue-600 text-white font-semibold text-sm hover:bg-blue-500 transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(59,130,246,0.3)]">
+                    <i data-feather="message-square" class="w-4 h-4"></i>
+                    Talk to my Digital Twin
+                </a>
+                <a href="#work" class="px-6 py-3 rounded-lg border border-white/10 text-gray-300 font-medium text-sm hover:bg-white/5 transition-all">
+                    View Selected Work
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Tech Ticker -->
+    <div class="border-y border-white/5 bg-white/[0.02] py-8 overflow-hidden">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex flex-wrap justify-center gap-x-12 gap-y-6 text-sm font-mono text-gray-500 uppercase tracking-widest">
+                <span>Python</span>
+                <span>Django</span>
+                <span>AWS / Azure</span>
+                <span>Terraform</span>
+                <span>MCP Protocol</span>
+                <span>RAG Architecture</span>
+                <span>Kubernetes</span>
+                <span>PostgreSQL</span>
+            </div>
+        </div>
     </div>
 
+    <!-- Philosophy / About -->
+    <section id="about" class="py-32 px-6 max-w-6xl mx-auto">
+        <h2 class="section-title reveal">01. Philosophy</h2>
+        
+        <div class="grid md:grid-cols-2 gap-16 reveal">
+            <div>
+                <h3 class="text-2xl font-bold text-white mb-6">The Builder's Mindset</h3>
+                <p class="text-gray-400 leading-relaxed mb-6">
+                    I don't just write code; I design systems. My career has evolved from automating scripts at Deloitte to architecting multi-tenant SaaS platforms at CloudBolt, and now, leading stealth teams in high-scale e-commerce.
+                </p>
+                <p class="text-gray-400 leading-relaxed">
+                    I believe in <strong>boring technology for critical paths</strong> and <strong>cutting-edge innovation for competitive advantage</strong>. My current focus is "AI as Infrastructure"—treating LLMs not as magic, but as deterministic components in a larger system.
+                </p>
+            </div>
+            
+            <div class="grid gap-4">
+                <div class="spotlight-card p-6 rounded-xl">
+                    <i data-feather="layers" class="text-blue-500 mb-4"></i>
+                    <h4 class="text-lg font-bold text-white mb-2">Architecture First</h4>
+                    <p class="text-sm text-gray-500">Scalability isn't an afterthought. I design for Day 2 operations, focusing on observability, modularity, and failure domains.</p>
+                </div>
+                <div class="spotlight-card p-6 rounded-xl">
+                    <i data-feather="cpu" class="text-purple-500 mb-4"></i>
+                    <h4 class="text-lg font-bold text-white mb-2">AI-Driven</h4>
+                    <p class="text-sm text-gray-500">Pioneering the use of Model Context Protocol (MCP) to give AI agents long-term memory and functional tool access.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Selected Work -->
+    <section id="work" class="py-32 px-6 max-w-6xl mx-auto">
+        <h2 class="section-title reveal">02. Selected Work</h2>
+
+        <div class="space-y-32">
+            <!-- Project 1: Stealth / Current -->
+            <div class="group grid md:grid-cols-12 gap-8 items-center reveal">
+                <div class="md:col-span-7 relative">
+                    <!-- Abstract representation of architecture -->
+                    <div class="aspect-video rounded-xl bg-gradient-to-br from-gray-900 to-black border border-white/10 overflow-hidden relative p-8 group-hover:border-blue-500/30 transition-colors">
+                        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIvPjwvc3ZnPg==')] opacity-50"></div>
+                        <div class="h-full w-full border border-dashed border-white/10 rounded flex items-center justify-center">
+                            <span class="font-mono text-xs text-blue-400 bg-blue-900/20 px-2 py-1 rounded">CONFIDENTIAL ARCHITECTURE</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:col-span-5">
+                    <span class="text-blue-500 font-mono text-xs mb-2 block">Oct 2025 - Present</span>
+                    <h3 class="text-2xl font-bold text-white mb-4">E-Commerce Orchestration Layer</h3>
+                    <p class="text-gray-400 mb-6 text-sm leading-relaxed">
+                        Leading a team of 6 to re-architect a monolithic system into a <strong>Serverless Event-Driven Architecture</strong> using Azure Functions. 
+                        Implemented centralized logging with Grafana Loki, reducing MTTR significantly.
+                    </p>
+                    <ul class="flex flex-wrap gap-2 text-xs font-mono text-gray-500 mb-6">
+                        <li class="border border-white/10 px-2 py-1 rounded">Azure</li>
+                        <li class="border border-white/10 px-2 py-1 rounded">Python</li>
+                        <li class="border border-white/10 px-2 py-1 rounded">System Design</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Project 2: Oracle AI -->
+            <div class="group grid md:grid-cols-12 gap-8 items-center reveal">
+                <div class="md:col-span-5 md:order-1 order-2">
+                    <span class="text-purple-500 font-mono text-xs mb-2 block">May 2025 - Oct 2025</span>
+                    <h3 class="text-2xl font-bold text-white mb-4">Oracle AI Optimizer (MCP)</h3>
+                    <p class="text-gray-400 mb-6 text-sm leading-relaxed">
+                        Solved the "Context Window" problem for Enterprise LLMs. Implemented the <strong>Model Context Protocol (MCP)</strong> to allow AI agents to dynamically fetch and retain context, reducing hallucinations in high-stakes data environments.
+                    </p>
+                    <ul class="flex flex-wrap gap-2 text-xs font-mono text-gray-500 mb-6">
+                        <li class="border border-white/10 px-2 py-1 rounded">GenAI</li>
+                        <li class="border border-white/10 px-2 py-1 rounded">MCP</li>
+                        <li class="border border-white/10 px-2 py-1 rounded">RAG</li>
+                    </ul>
+                </div>
+                <div class="md:col-span-7 md:order-2 order-1 relative">
+                    <div class="aspect-video rounded-xl bg-gradient-to-br from-purple-900/10 to-black border border-white/10 overflow-hidden relative p-8 group-hover:border-purple-500/30 transition-colors">
+                        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIvPjwvc3ZnPg==')] opacity-50"></div>
+                        <div class="font-mono text-xs text-purple-400">
+                            > initializing context_manager...<br>
+                            > connection established: oracle_db<br>
+                            > deploying agent...<br>
+                            <span class="text-green-400"> > success (99.8% accuracy)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 3: CloudBolt -->
+            <div class="group grid md:grid-cols-12 gap-8 items-center reveal">
+                <div class="md:col-span-7 relative">
+                    <div class="aspect-video rounded-xl bg-gradient-to-br from-gray-900 to-black border border-white/10 overflow-hidden relative p-8 group-hover:border-green-500/30 transition-colors flex items-end">
+                        <div class="w-full space-y-2">
+                            <div class="h-2 bg-gray-800 rounded w-3/4"></div>
+                            <div class="h-2 bg-gray-800 rounded w-1/2"></div>
+                            <div class="h-2 bg-green-500/50 rounded w-full"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:col-span-5">
+                    <span class="text-green-500 font-mono text-xs mb-2 block">Dec 2021 - Mar 2025</span>
+                    <h3 class="text-2xl font-bold text-white mb-4">Cloud Governance at Scale</h3>
+                    <p class="text-gray-400 mb-6 text-sm leading-relaxed">
+                        Engineered the backbone of a Hybrid Cloud Management Platform. Used <strong>Django</strong> and <strong>Terraform</strong> to manage resources across AWS, Azure, and VMware. Improved system stability by 30% through code refactoring.
+                    </p>
+                    <ul class="flex flex-wrap gap-2 text-xs font-mono text-gray-500 mb-6">
+                        <li class="border border-white/10 px-2 py-1 rounded">Django</li>
+                        <li class="border border-white/10 px-2 py-1 rounded">Terraform</li>
+                        <li class="border border-white/10 px-2 py-1 rounded">PostgreSQL</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW SECTION: AI LAB (Gemini Integration) -->
+    <section id="ai-lab" class="py-32 px-6 max-w-6xl mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-12 reveal">
+            <div>
+                <h2 class="section-title mb-0">03. The Neural Interface</h2>
+                <h3 class="text-3xl font-bold text-white mt-4">Powered by Gemini ✨</h3>
+            </div>
+            <div class="flex gap-4 mt-4 md:mt-0">
+                <button onclick="switchTab('chat')" id="btn-chat" class="px-4 py-2 text-sm font-mono rounded bg-blue-600 text-white transition-colors">./chat_with_ishu.sh</button>
+                <button onclick="switchTab('audit')" id="btn-audit" class="px-4 py-2 text-sm font-mono rounded border border-white/10 text-gray-400 hover:text-white hover:bg-white/5 transition-colors">./system_audit.py</button>
+            </div>
+        </div>
+
+        <div class="terminal-window rounded-lg overflow-hidden reveal">
+            <div class="terminal-header">
+                <div class="terminal-dots">
+                    <div class="dot dot-red"></div>
+                    <div class="dot dot-yellow"></div>
+                    <div class="dot dot-green"></div>
+                </div>
+                <div class="mx-auto text-xs text-gray-500 font-mono flex items-center gap-2">
+                    <i data-feather="lock" class="w-3 h-3"></i> 
+                    <span id="terminal-title">ishu_digital_twin — ssh session</span>
+                </div>
+            </div>
+            
+            <div class="p-6 h-[400px] overflow-y-auto bg-black/50" id="terminal-content">
+                <!-- Chat Mode Content (Default) -->
+                <div id="view-chat" class="h-full flex flex-col">
+                    <div class="flex-1 space-y-4" id="chat-history">
+                        <div class="chat-message">
+                            <span class="chat-ai">system:</span> 
+                            <span class="text-green-500">Connection established.</span><br>
+                            <span class="text-gray-400">I am Ishu's Digital Twin (powered by Gemini). Ask me about my experience with Azure, my approach to leadership, or how I scaled systems at CloudBolt.</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center border-t border-white/10 pt-4">
+                        <span class="text-blue-500 mr-2 font-mono">visitor@portfolio:~$</span>
+                        <input type="text" id="chat-input" class="bg-transparent border-none outline-none text-white flex-1 font-mono text-sm" placeholder="Ask me anything..." onkeypress="handleChat(event)">
+                        <button onclick="sendChat()" class="text-xs bg-white/10 hover:bg-white/20 px-3 py-1 rounded text-white transition-colors">ENTER</button>
+                    </div>
+                </div>
+
+                <!-- Audit Mode Content (Hidden) -->
+                <div id="view-audit" class="hidden h-full flex flex-col">
+                    <div class="flex-1 space-y-4 overflow-y-auto" id="audit-result">
+                        <div class="chat-message">
+                            <span class="chat-ai">system:</span> 
+                            <span class="text-purple-500">Architecture Review Protocol loaded.</span><br>
+                            <span class="text-gray-400">Paste a code snippet, describing a bottleneck, or ask for a pattern recommendation. I will provide a high-level architectural critique.</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 border-t border-white/10 pt-4">
+                        <div class="flex gap-2">
+                            <span class="text-purple-500 font-mono pt-1">>></span>
+                            <textarea id="audit-input" class="bg-transparent border-none outline-none text-white flex-1 font-mono text-sm resize-none h-16" placeholder="Describe your system problem (e.g., 'My Postgres query is slow on large joins...')" onkeypress="handleAudit(event)"></textarea>
+                            <button onclick="sendAudit()" class="h-10 self-end text-xs bg-purple-600 hover:bg-purple-500 px-4 py-1 rounded text-white transition-colors font-bold">ANALYZE ✨</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Open Source / Community -->
+    <section id="oss" class="py-32 px-6 max-w-4xl mx-auto">
+        <h2 class="section-title reveal">04. Open Source & Community</h2>
+        
+        <div class="spotlight-card rounded-xl p-8 reveal">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                <div class="text-xs font-mono text-gray-500 ml-auto">bash — 80x24</div>
+            </div>
+            
+            <div class="font-mono text-sm space-y-4">
+                <div class="flex gap-4">
+                    <span class="text-blue-400">ishu@dev:~$</span>
+                    <span class="text-white">ls ./contributions</span>
+                </div>
+                
+                <div class="pl-4 border-l border-white/10 space-y-4">
+                    <div>
+                        <a href="#" class="text-green-400 hover:underline">Term Code</a>
+                        <p class="text-gray-500 text-xs mt-1">Enhanced Claude code generation integration.</p>
+                    </div>
+                    <div>
+                        <a href="#" class="text-green-400 hover:underline">Oracle AI Optimizer</a>
+                        <p class="text-gray-500 text-xs mt-1">MCP Implementation for dynamic contexts.</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-4 pt-4">
+                    <span class="text-blue-400">ishu@dev:~$</span>
+                    <span class="text-white">echo "Community Values"</span>
+                </div>
+                <div class="pl-4 text-gray-400 text-xs leading-relaxed">
+                    "I believe in open standards and reproducible infrastructure. My goal is to lower the barrier to entry for building intelligent, agentic systems."
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact / Footer -->
+    <section class="py-32 px-6 max-w-6xl mx-auto border-t border-white/10">
+        <div class="grid md:grid-cols-2 gap-16 items-center reveal">
+            <div>
+                <h2 class="text-4xl font-bold text-white mb-6">Ready to build?</h2>
+                <p class="text-gray-400 mb-8 max-w-md">
+                    I am always interested in discussing technical leadership roles, complex backend challenges, and the future of AI infrastructure.
+                </p>
+                <a href="mailto:ishu.kumars@gmail.com" class="inline-flex items-center gap-2 text-white border-b border-white pb-1 hover:text-blue-400 hover:border-blue-400 transition-colors">
+                    ishu.kumars@gmail.com
+                    <i data-feather="arrow-up-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <a href="https://linkedin.com/in/ishukumars" target="_blank" class="spotlight-card p-6 rounded-xl flex flex-col justify-between h-32 hover:bg-white/5 transition-colors group">
+                    <i data-feather="linkedin" class="text-gray-400 group-hover:text-blue-400 transition-colors"></i>
+                    <span class="text-sm font-medium text-white">LinkedIn</span>
+                </a>
+                <a href="https://github.com/Ishuin" target="_blank" class="spotlight-card p-6 rounded-xl flex flex-col justify-between h-32 hover:bg-white/5 transition-colors group">
+                    <i data-feather="github" class="text-gray-400 group-hover:text-white transition-colors"></i>
+                    <span class="text-sm font-medium text-white">GitHub</span>
+                </a>
+                <a href="Ishu_Resume_2026.pdf" download class="spotlight-card p-6 rounded-xl flex flex-col justify-between h-32 hover:bg-white/5 transition-colors group col-span-2">
+                    <i data-feather="file-text" class="text-gray-400 group-hover:text-green-400 transition-colors"></i>
+                    <div class="flex justify-between items-end">
+                        <span class="text-sm font-medium text-white">Download Resume (PDF)</span>
+                        <i data-feather="download" class="w-4 h-4 text-gray-500"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+        
+        <div class="mt-20 text-center text-xs text-gray-600 font-mono">
+            &copy; 2025 Ishu Kumar. Engineered with HTML, Tailwind & Gemini 2.5 Flash.
+        </div>
+    </section>
+
+    <script>
+        // Init Feather Icons
+        feather.replace();
+
+        // Spotlight Effect Logic
+        document.addEventListener('mousemove', (e) => {
+            document.querySelectorAll('.spotlight-card').forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // Scroll Reveal Logic
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // --- GEMINI AI INTEGRATION ---
+        
+        // Tab Switching
+        function switchTab(tab) {
+            const btnChat = document.getElementById('btn-chat');
+            const btnAudit = document.getElementById('btn-audit');
+            const viewChat = document.getElementById('view-chat');
+            const viewAudit = document.getElementById('view-audit');
+            const title = document.getElementById('terminal-title');
+
+            if (tab === 'chat') {
+                btnChat.classList.remove('bg-transparent', 'text-gray-400', 'border', 'border-white/10');
+                btnChat.classList.add('bg-blue-600', 'text-white');
+                btnAudit.classList.add('text-gray-400', 'border', 'border-white/10');
+                btnAudit.classList.remove('bg-purple-600', 'text-white');
+                
+                viewChat.classList.remove('hidden');
+                viewAudit.classList.add('hidden');
+                title.innerText = 'ishu_digital_twin — ssh session';
+            } else {
+                btnAudit.classList.remove('bg-transparent', 'text-gray-400', 'border', 'border-white/10');
+                btnAudit.classList.add('bg-purple-600', 'text-white');
+                btnChat.classList.add('text-gray-400', 'border', 'border-white/10');
+                btnChat.classList.remove('bg-blue-600', 'text-white');
+
+                viewAudit.classList.remove('hidden');
+                viewChat.classList.add('hidden');
+                title.innerText = 'system_architect_protocol — analysis';
+            }
+        }
+
+        // API Key (Runtime Provided)
+        const apiKey = "AIzaSyBheFLpivfngiw-rc2n7-yvH1p1gnQYqrk"; 
+
+        // Helper: Call Gemini
+        async function callGemini(prompt, systemPrompt) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+            };
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (!response.ok) throw new Error('API Error');
+                
+                const data = await response.json();
+                return data.candidates?.[0]?.content?.parts?.[0]?.text || "Connection interrupted. Try again.";
+            } catch (error) {
+                console.error(error);
+                return "Error connecting to AI Neural Link. Please try again later.";
+            }
+        }
+
+        // --- Chat Feature ---
+        const resumeContext = `
+        Identity: Ishu Kumar, Technical Lead & Systems Architect.
+        Tone: Professional, engineering-focused, concise, slightly technical.
+        Experience: 6+ years.
+        Current Role: Technical Lead (Stealth). Leading team of 6. Re-architecting E-commerce platform to Serverless Event-Driven Architecture (Azure Functions). Implemented Grafana Loki for logging.
+        Past Role 1: Senior AI Engineer at Kumolus India (May 2025 - Oct 2025). Led implementation of Model Context Protocol (MCP) in Oracle AI Optimizer.
+        Past Role 2: Senior Software Engineer at CloudBolt (Dec 2021 - Mar 2025). Hybrid Cloud Management (AWS/Azure/VMware). Django & Terraform. Improved stability by 30%.
+        Past Role 3: Analyst at Deloitte. Python automation (90% manual task reduction).
+        Skills: Python, Django, AWS, Azure, Terraform, Kubernetes, MCP, RAG, OpenAI.
+        Goal: Discuss technical experience and leadership philosophy with recruiters/engineers.
+        Answer as Ishu. Keep answers under 3 sentences unless asked for detail.
+        `;
+
+        function handleChat(e) {
+            if (e.key === 'Enter') sendChat();
+        }
+
+        async function sendChat() {
+            const input = document.getElementById('chat-input');
+            const history = document.getElementById('chat-history');
+            const userText = input.value.trim();
+            if (!userText) return;
+
+            // Add User Message
+            history.innerHTML += `
+                <div class="chat-message">
+                    <span class="chat-user">visitor@portfolio:~$</span> ${userText}
+                </div>
+            `;
+            input.value = '';
+            
+            // Scroll to bottom
+            const container = document.getElementById('terminal-content');
+            container.scrollTop = container.scrollHeight;
+
+            // Loading Indicator
+            const loaderId = `loader-${Date.now()}`;
+            history.innerHTML += `
+                <div class="chat-message" id="${loaderId}">
+                    <span class="chat-ai">ishu_ai:</span> <span class="loader inline-block"><span></span><span></span><span></span></span>
+                </div>
+            `;
+            container.scrollTop = container.scrollHeight;
+
+            // Call API
+            const response = await callGemini(userText, resumeContext);
+
+            // Replace Loader
+            document.getElementById(loaderId).innerHTML = `
+                <span class="chat-ai">ishu_ai:</span> <span class="text-gray-300">${marked.parseInline(response)}</span>
+            `;
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // --- Audit Feature ---
+        const auditContext = `
+        Role: Senior System Architect / Staff Engineer.
+        Task: Analyze the user's technical problem description.
+        Output: A brief, punchy architectural recommendation. Use bold text for key patterns (e.g., **Circuit Breaker**).
+        Style: Constructive, high-level, "Systems Thinking". 
+        Example Output: "This sounds like a read-heavy bottleneck. Consider implementing a **Read-Through Cache** pattern with Redis to offload the primary DB, or evaluate **Materialized Views** if real-time consistency isn't critical."
+        `;
+
+        function handleAudit(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendAudit();
+            }
+        }
+
+        async function sendAudit() {
+            const input = document.getElementById('audit-input');
+            const resultArea = document.getElementById('audit-result');
+            const userText = input.value.trim();
+            if (!userText) return;
+
+            // Add User Query
+            resultArea.innerHTML += `
+                <div class="chat-message border-b border-white/5 pb-2">
+                    <span class="text-purple-500 font-mono">>> Input:</span> <span class="text-gray-400 italic">${userText}</span>
+                </div>
+            `;
+            input.value = '';
+            
+            // Loading
+            const loaderId = `audit-loader-${Date.now()}`;
+            resultArea.innerHTML += `
+                <div class="chat-message" id="${loaderId}">
+                    <span class="text-purple-500 font-mono">>> Analysis:</span> <span class="loader inline-block"><span></span><span></span><span></span></span>
+                </div>
+            `;
+
+            // Call API
+            const response = await callGemini(userText, auditContext);
+
+            // Show Result
+            document.getElementById(loaderId).innerHTML = `
+                <span class="text-purple-500 font-mono">>> Analysis:</span> 
+                <span class="text-white block mt-1 pl-4 border-l-2 border-purple-500/50">${marked.parseInline(response)}</span>
+            `;
+        }
+
+    </script>
+</body>
 </html>
