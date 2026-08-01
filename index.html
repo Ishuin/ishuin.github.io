@@ -4,27 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ishu Kumar | Technical Lead & Systems Architect</title>
+    <meta name="description" content="Portfolio of Ishu Kumar - Technical Lead specializing in Python, Django, Cloud Architecture, and AI Systems.">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <!-- Feather Icons -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
-
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
-    <!-- Markdown Parser (for AI responses) -->
+    <!-- Markdown Parser -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
 
     <style>
         :root {
             --bg-body: #050505;
             --bg-card: #0a0a0a;
-            --border-color: rgba(255, 255, 255, 0.1);
+            --border-color: rgba(255, 255, 255, 0.08);
             --text-main: #ededed;
             --text-muted: #a1a1aa;
             --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-green: #10b981;
             --accent-glow: rgba(59, 130, 246, 0.15);
         }
 
@@ -33,22 +46,18 @@
             color: var(--text-main);
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
-            selection-background-color: var(--accent-blue);
-            selection-color: white;
         }
-
-        .font-mono { font-family: 'JetBrains Mono', monospace; }
 
         /* --- Ambient Background --- */
         .ambient-glow {
             position: fixed;
             width: 100vw;
             height: 100vh;
-            top: 0;
-            left: 0;
+            top: 0; left: 0;
             background: 
-                radial-gradient(circle at 15% 50%, rgba(56, 189, 248, 0.08), transparent 25%), 
-                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.08), transparent 25%);
+                radial-gradient(circle at 15% 50%, rgba(56, 189, 248, 0.07), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.07), transparent 25%),
+                radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.04), transparent 30%);
             z-index: -1;
             pointer-events: none;
         }
@@ -57,19 +66,19 @@
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+                linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
             background-size: 60px 60px;
-            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
-            -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+            mask-image: radial-gradient(circle at center, black 30%, transparent 100%);
+            -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 100%);
             z-index: -1;
-            opacity: 0.6;
+            opacity: 0.5;
         }
 
         /* --- Glass Navigation --- */
         .glass-nav {
-            background: rgba(5, 5, 5, 0.7);
-            backdrop-filter: blur(12px);
+            background: rgba(5, 5, 5, 0.75);
+            backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--border-color);
         }
 
@@ -79,7 +88,7 @@
             border: 1px solid var(--border-color);
             position: relative;
             overflow: hidden;
-            transition: border-color 0.3s;
+            transition: border-color 0.3s, transform 0.2s;
         }
 
         .spotlight-card::before {
@@ -88,33 +97,29 @@
             height: 100%;
             width: 100%;
             top: 0; left: 0;
-            background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.06), transparent 40%);
+            background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.05), transparent 40%);
             opacity: 0;
             transition: opacity 0.5s;
             pointer-events: none;
         }
 
-        .spotlight-card:hover::before {
-            opacity: 1;
-        }
-        
-        .spotlight-card:hover {
-            border-color: rgba(255, 255, 255, 0.2);
-        }
+        .spotlight-card:hover::before { opacity: 1; }
+        .spotlight-card:hover { border-color: rgba(255, 255, 255, 0.18); transform: translateY(-2px); }
 
         /* --- Typography & Utilities --- */
         .text-gradient {
             background: linear-gradient(to right, #ffffff, #a1a1aa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .section-title {
-            font-size: 0.875rem; /* text-sm */
+            font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.12em;
             color: var(--text-muted);
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
             display: flex;
             align-items: center;
             gap: 1rem;
@@ -127,10 +132,9 @@
             background: linear-gradient(to right, var(--border-color), transparent);
         }
 
-        /* Reveal Animation */
         .reveal {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(24px);
             transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .reveal.visible {
@@ -142,53 +146,40 @@
         .terminal-window {
             background: #0d0d0d;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6);
             font-family: 'JetBrains Mono', monospace;
         }
 
         .terminal-header {
             background: #1a1a1a;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             display: flex;
             align-items: center;
-            padding: 0.5rem 1rem;
+            padding: 0.6rem 1rem;
         }
 
-        .terminal-dots {
-            display: flex;
-            gap: 6px;
-        }
-        .dot { width: 10px; height: 10px; rounded: 50%; border-radius: 50%; }
+        .terminal-dots { display: flex; gap: 6px; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
         .dot-red { background: #ef4444; }
         .dot-yellow { background: #f59e0b; }
         .dot-green { background: #10b981; }
 
-        .chat-message {
-            margin-bottom: 1rem;
-            line-height: 1.6;
-            font-size: 0.875rem;
-        }
-        .chat-user { color: #3b82f6; font-weight: bold; }
-        .chat-ai { color: #a1a1aa; }
+        .chat-message { margin-bottom: 1rem; line-height: 1.7; font-size: 0.85rem; }
+        .chat-user { color: var(--accent-blue); font-weight: bold; }
+        .chat-ai { color: var(--text-muted); }
         
         .blinking-cursor::after {
             content: '▋';
             animation: blink 1s step-end infinite;
-            color: #3b82f6;
+            color: var(--accent-blue);
             margin-left: 2px;
         }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
-        /* Loader */
-        .loader {
-            display: flex;
-            gap: 4px;
-            align-items: center;
-        }
+        .loader { display: flex; gap: 4px; align-items: center; }
         .loader span {
-            width: 4px;
-            height: 4px;
-            background: #a1a1aa;
+            width: 4px; height: 4px;
+            background: var(--text-muted);
             border-radius: 50%;
             animation: bounce 0.6s infinite alternate;
         }
@@ -196,6 +187,62 @@
         .loader span:nth-child(3) { animation-delay: 0.4s; }
         @keyframes bounce { to { transform: translateY(-4px); } }
 
+        /* --- Repo Card --- */
+        .repo-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            transition: border-color 0.3s, transform 0.2s;
+        }
+        .repo-card:hover {
+            border-color: rgba(255,255,255,0.18);
+            transform: translateY(-2px);
+        }
+        .repo-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.75rem;
+            align-items: center;
+        }
+        .repo-meta span { display: inline-flex; align-items: center; gap: 0.25rem; }
+
+        /* --- Skill Bar --- */
+        .skill-track {
+            height: 6px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 999px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+        .skill-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple));
+            border-radius: 999px;
+            transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* --- Activity Dot --- */
+        .activity-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        /* --- Pulse --- */
+        .pulse-green { animation: pulseGreen 2s infinite; }
+        @keyframes pulseGreen {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            50% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
     </style>
 </head>
 <body>
@@ -214,10 +261,11 @@
             <div class="hidden md:flex gap-8 text-sm font-medium text-gray-400">
                 <a href="#about" class="hover:text-white transition-colors">Philosophy</a>
                 <a href="#work" class="hover:text-white transition-colors">Selected Work</a>
+                <a href="#projects" class="hover:text-white transition-colors">Projects</a>
                 <a href="#ai-lab" class="hover:text-blue-400 transition-colors flex items-center gap-1">
                     <i data-feather="cpu" class="w-3 h-3"></i> AI Lab
                 </a>
-                <a href="#oss" class="hover:text-white transition-colors">Open Source</a>
+                <a href="#contact" class="hover:text-white transition-colors">Contact</a>
             </div>
 
             <div class="flex items-center gap-4">
@@ -235,14 +283,14 @@
     </nav>
 
     <!-- Hero Section -->
-    <header class="pt-40 pb-32 px-6 max-w-6xl mx-auto">
+    <header class="pt-40 pb-28 px-6 max-w-6xl mx-auto">
         <div class="max-w-4xl">
             <div class="reveal inline-flex items-center gap-2 px-3 py-1 rounded-full border border-green-900/30 bg-green-900/10 text-green-400 text-xs font-mono mb-8">
                 <span class="relative flex h-2 w-2">
                   <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                   <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                 </span>
-                System Status: Operational
+                <span id="status-text">System Status: Operational</span>
             </div>
 
             <h1 class="reveal text-6xl md:text-8xl font-bold tracking-tighter text-white mb-4">
@@ -255,7 +303,7 @@
             </h2>
 
             <p class="reveal text-xl text-gray-400 max-w-2xl leading-relaxed mb-12">
-                I am a <strong>Technical Lead & Backend Architect</strong> who turns complex ideas into production-grade infrastructure. 
+                I am a <strong class="text-white">Technical Lead & Backend Architect</strong> who turns complex ideas into production-grade infrastructure. 
                 Currently focused on bridging the gap between <span class="text-white">Distributed Cloud Systems</span> and <span class="text-white">Agentic AI</span>.
             </p>
 
@@ -264,7 +312,7 @@
                     <i data-feather="message-square" class="w-4 h-4"></i>
                     Talk to my Digital Twin
                 </a>
-                <a href="#work" class="px-6 py-3 rounded-lg border border-white/10 text-gray-300 font-medium text-sm hover:bg-white/5 transition-all">
+                <a href="#projects" class="px-6 py-3 rounded-lg border border-white/10 text-gray-300 font-medium text-sm hover:bg-white/5 transition-all">
                     View Selected Work
                 </a>
             </div>
@@ -283,6 +331,8 @@
                 <span>RAG Architecture</span>
                 <span>Kubernetes</span>
                 <span>PostgreSQL</span>
+                <span>FastAPI</span>
+                <span>Docker</span>
             </div>
         </div>
     </div>
@@ -295,23 +345,34 @@
             <div>
                 <h3 class="text-2xl font-bold text-white mb-6">The Builder's Mindset</h3>
                 <p class="text-gray-400 leading-relaxed mb-6">
-                    I don't just write code; I design systems. My career has evolved from automating scripts at Deloitte to architecting multi-tenant SaaS platforms at CloudBolt, and now, leading stealth teams in high-scale e-commerce.
+                    I don't just write code; I design systems. My career has evolved from automating scripts at Deloitte to architecting multi-tenant SaaS platforms at CloudBolt, and now, leading teams in high-scale environments.
                 </p>
                 <p class="text-gray-400 leading-relaxed">
-                    I believe in <strong>boring technology for critical paths</strong> and <strong>cutting-edge innovation for competitive advantage</strong>. My current focus is "AI as Infrastructure"—treating LLMs not as magic, but as deterministic components in a larger system.
+                    I believe in <strong class="text-white">boring technology for critical paths</strong> and <strong class="text-white">cutting-edge innovation for competitive advantage</strong>. My current focus is "AI as Infrastructure"—treating LLMs not as magic, but as deterministic components in a larger system.
                 </p>
             </div>
             
             <div class="grid gap-4">
                 <div class="spotlight-card p-6 rounded-xl">
-                    <i data-feather="layers" class="text-blue-500 mb-4"></i>
-                    <h4 class="text-lg font-bold text-white mb-2">Architecture First</h4>
+                    <div class="flex items-center gap-3 mb-3">
+                        <i data-feather="layers" class="text-blue-500 w-5 h-5"></i>
+                        <h4 class="text-lg font-bold text-white">Architecture First</h4>
+                    </div>
                     <p class="text-sm text-gray-500">Scalability isn't an afterthought. I design for Day 2 operations, focusing on observability, modularity, and failure domains.</p>
                 </div>
                 <div class="spotlight-card p-6 rounded-xl">
-                    <i data-feather="cpu" class="text-purple-500 mb-4"></i>
-                    <h4 class="text-lg font-bold text-white mb-2">AI-Driven</h4>
+                    <div class="flex items-center gap-3 mb-3">
+                        <i data-feather="cpu" class="text-purple-500 w-5 h-5"></i>
+                        <h4 class="text-lg font-bold text-white">AI-Driven</h4>
+                    </div>
                     <p class="text-sm text-gray-500">Pioneering the use of Model Context Protocol (MCP) to give AI agents long-term memory and functional tool access.</p>
+                </div>
+                <div class="spotlight-card p-6 rounded-xl">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i data-feather="shield" class="text-green-500 w-5 h-5"></i>
+                        <h4 class="text-lg font-bold text-white">Production-Grade</h4>
+                    </div>
+                    <p class="text-sm text-gray-500">Every solution is built with testing, monitoring, and documentation in mind. No shortcuts, no tech debt without a payoff.</p>
                 </div>
             </div>
         </div>
@@ -325,7 +386,6 @@
             <!-- Project 1: Stealth / Current -->
             <div class="group grid md:grid-cols-12 gap-8 items-center reveal">
                 <div class="md:col-span-7 relative">
-                    <!-- Abstract representation of architecture -->
                     <div class="aspect-video rounded-xl bg-gradient-to-br from-gray-900 to-black border border-white/10 overflow-hidden relative p-8 group-hover:border-blue-500/30 transition-colors">
                         <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIvPjwvc3ZnPg==')] opacity-50"></div>
                         <div class="h-full w-full border border-dashed border-white/10 rounded flex items-center justify-center">
@@ -337,13 +397,14 @@
                     <span class="text-blue-500 font-mono text-xs mb-2 block">Oct 2025 - Present</span>
                     <h3 class="text-2xl font-bold text-white mb-4">E-Commerce Orchestration Layer</h3>
                     <p class="text-gray-400 mb-6 text-sm leading-relaxed">
-                        Leading a team of 6 to re-architect a monolithic system into a <strong>Serverless Event-Driven Architecture</strong> using Azure Functions. 
+                        Leading a team of 6 to re-architect a monolithic system into a <strong class="text-white">Serverless Event-Driven Architecture</strong> using Azure Functions. 
                         Implemented centralized logging with Grafana Loki, reducing MTTR significantly.
                     </p>
                     <ul class="flex flex-wrap gap-2 text-xs font-mono text-gray-500 mb-6">
                         <li class="border border-white/10 px-2 py-1 rounded">Azure</li>
                         <li class="border border-white/10 px-2 py-1 rounded">Python</li>
                         <li class="border border-white/10 px-2 py-1 rounded">System Design</li>
+                        <li class="border border-white/10 px-2 py-1 rounded">Event-Driven</li>
                     </ul>
                 </div>
             </div>
@@ -354,12 +415,13 @@
                     <span class="text-purple-500 font-mono text-xs mb-2 block">May 2025 - Oct 2025</span>
                     <h3 class="text-2xl font-bold text-white mb-4">Oracle AI Optimizer (MCP)</h3>
                     <p class="text-gray-400 mb-6 text-sm leading-relaxed">
-                        Solved the "Context Window" problem for Enterprise LLMs. Implemented the <strong>Model Context Protocol (MCP)</strong> to allow AI agents to dynamically fetch and retain context, reducing hallucinations in high-stakes data environments.
+                        Solved the "Context Window" problem for Enterprise LLMs. Implemented the <strong class="text-white">Model Context Protocol (MCP)</strong> to allow AI agents to dynamically fetch and retain context, reducing hallucinations in high-stakes data environments.
                     </p>
                     <ul class="flex flex-wrap gap-2 text-xs font-mono text-gray-500 mb-6">
                         <li class="border border-white/10 px-2 py-1 rounded">GenAI</li>
                         <li class="border border-white/10 px-2 py-1 rounded">MCP</li>
                         <li class="border border-white/10 px-2 py-1 rounded">RAG</li>
+                        <li class="border border-white/10 px-2 py-1 rounded">Python</li>
                     </ul>
                 </div>
                 <div class="md:col-span-7 md:order-2 order-1 relative">
@@ -390,23 +452,71 @@
                     <span class="text-green-500 font-mono text-xs mb-2 block">Dec 2021 - Mar 2025</span>
                     <h3 class="text-2xl font-bold text-white mb-4">Cloud Governance at Scale</h3>
                     <p class="text-gray-400 mb-6 text-sm leading-relaxed">
-                        Engineered the backbone of a Hybrid Cloud Management Platform. Used <strong>Django</strong> and <strong>Terraform</strong> to manage resources across AWS, Azure, and VMware. Improved system stability by 30% through code refactoring.
+                        Engineered the backbone of a Hybrid Cloud Management Platform. Used <strong class="text-white">Django</strong> and <strong class="text-white">Terraform</strong> to manage resources across AWS, Azure, and VMware. Improved system stability by 30% through code refactoring.
                     </p>
                     <ul class="flex flex-wrap gap-2 text-xs font-mono text-gray-500 mb-6">
                         <li class="border border-white/10 px-2 py-1 rounded">Django</li>
                         <li class="border border-white/10 px-2 py-1 rounded">Terraform</li>
                         <li class="border border-white/10 px-2 py-1 rounded">PostgreSQL</li>
+                        <li class="border border-white/10 px-2 py-1 rounded">AWS</li>
                     </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- NEW SECTION: AI LAB (Gemini Integration) -->
+    <!-- Featured Projects (Dynamic from GitHub) -->
+    <section id="projects" class="py-32 px-6 max-w-6xl mx-auto">
+        <h2 class="section-title reveal">03. Open Source Projects</h2>
+        
+        <div class="reveal flex items-center gap-3 mb-8">
+            <span class="activity-dot bg-green-500 pulse-green"></span>
+            <span class="text-xs font-mono text-gray-500">LIVE FROM GITHUB — auto-updated</span>
+        </div>
+
+        <div id="repo-grid" class="grid md:grid-cols-2 gap-6 reveal">
+            <div class="repo-card flex items-center justify-center h-32 text-gray-500 text-sm">Loading repositories...</div>
+        </div>
+
+        <div class="mt-8 reveal">
+            <a href="https://github.com/Ishuin?tab=repositories" target="_blank" class="text-xs font-mono text-gray-500 hover:text-blue-400 transition-colors inline-flex items-center gap-2">
+                View all repositories on GitHub <i data-feather="external-link" class="w-3 h-3"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="py-32 px-6 max-w-6xl mx-auto">
+        <h2 class="section-title reveal">04. Tech Stack</h2>
+        
+        <div class="grid md:grid-cols-2 gap-x-16 gap-y-6 reveal" id="skills-container">
+            <!-- Skills injected by JS -->
+        </div>
+    </section>
+
+    <!-- Latest Activity -->
+    <section class="py-32 px-6 max-w-6xl mx-auto">
+        <h2 class="section-title reveal">05. Latest Activity</h2>
+        
+        <div class="spotlight-card rounded-xl p-8 reveal">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                <div class="text-xs font-mono text-gray-500 ml-auto">bash — recent commits</div>
+            </div>
+            
+            <div id="activity-feed" class="font-mono text-sm space-y-4">
+                <div class="text-gray-500">Loading recent activity...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI LAB -->
     <section id="ai-lab" class="py-32 px-6 max-w-6xl mx-auto">
         <div class="flex flex-col md:flex-row justify-between items-end mb-12 reveal">
             <div>
-                <h2 class="section-title mb-0">03. The Neural Interface</h2>
+                <h2 class="section-title mb-0">06. The Neural Interface</h2>
                 <h3 class="text-3xl font-bold text-white mt-4">Powered by Gemini ✨</h3>
             </div>
             <div class="flex gap-4 mt-4 md:mt-0">
@@ -466,48 +576,8 @@
         </div>
     </section>
 
-    <!-- Open Source / Community -->
-    <section id="oss" class="py-32 px-6 max-w-4xl mx-auto">
-        <h2 class="section-title reveal">04. Open Source & Community</h2>
-        
-        <div class="spotlight-card rounded-xl p-8 reveal">
-            <div class="flex items-center gap-4 mb-8">
-                <div class="w-3 h-3 rounded-full bg-red-500"></div>
-                <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
-                <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                <div class="text-xs font-mono text-gray-500 ml-auto">bash — 80x24</div>
-            </div>
-            
-            <div class="font-mono text-sm space-y-4">
-                <div class="flex gap-4">
-                    <span class="text-blue-400">ishu@dev:~$</span>
-                    <span class="text-white">ls ./contributions</span>
-                </div>
-                
-                <div class="pl-4 border-l border-white/10 space-y-4">
-                    <div>
-                        <a href="#" class="text-green-400 hover:underline">Term Code</a>
-                        <p class="text-gray-500 text-xs mt-1">Enhanced Claude code generation integration.</p>
-                    </div>
-                    <div>
-                        <a href="#" class="text-green-400 hover:underline">Oracle AI Optimizer</a>
-                        <p class="text-gray-500 text-xs mt-1">MCP Implementation for dynamic contexts.</p>
-                    </div>
-                </div>
-
-                <div class="flex gap-4 pt-4">
-                    <span class="text-blue-400">ishu@dev:~$</span>
-                    <span class="text-white">echo "Community Values"</span>
-                </div>
-                <div class="pl-4 text-gray-400 text-xs leading-relaxed">
-                    "I believe in open standards and reproducible infrastructure. My goal is to lower the barrier to entry for building intelligent, agentic systems."
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Contact / Footer -->
-    <section class="py-32 px-6 max-w-6xl mx-auto border-t border-white/10">
+    <section id="contact" class="py-32 px-6 max-w-6xl mx-auto border-t border-white/10">
         <div class="grid md:grid-cols-2 gap-16 items-center reveal">
             <div>
                 <h2 class="text-4xl font-bold text-white mb-6">Ready to build?</h2>
@@ -540,7 +610,7 @@
         </div>
         
         <div class="mt-20 text-center text-xs text-gray-600 font-mono">
-            &copy; 2025 Ishu Kumar. Engineered with HTML, Tailwind & Gemini 2.5 Flash.
+            &copy; <span id="year"></span> Ishu Kumar. Engineered with HTML, Tailwind & Gemini 2.5 Flash.
         </div>
     </section>
 
@@ -548,31 +618,228 @@
         // Init Feather Icons
         feather.replace();
 
-        // Spotlight Effect Logic
+        // --- Dynamic Year ---
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // --- Spotlight Effect ---
         document.addEventListener('mousemove', (e) => {
             document.querySelectorAll('.spotlight-card').forEach(card => {
                 const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                card.style.setProperty('--mouse-x', `${x}px`);
-                card.style.setProperty('--mouse-y', `${y}px`);
+                card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+                card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
             });
         });
 
-        // Scroll Reveal Logic
+        // --- Scroll Reveal ---
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
                 }
             });
-        }, { threshold: 0.1 });
+        }, { threshold: 0.08 });
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // --- GEMINI AI INTEGRATION ---
-        
-        // Tab Switching
+        // --- GITHUB REPOS FETCH ---
+        const GITHUB_USERS = ['Ishuin', 'nexfini'];
+        const REPO_CACHE_KEY = 'ishuin_portfolio_repos';
+        const ACTIVITY_CACHE_KEY = 'ishuin_portfolio_activity';
+
+        async function fetchGitHub(endpoint) {
+            const res = await fetch(`https://api.github.com/${endpoint}`);
+            if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
+            return res.json();
+        }
+
+        function renderStars(stars) {
+            if (stars >= 1000) return (stars / 1000).toFixed(1) + 'k';
+            return stars.toString();
+        }
+
+        function getLanguageColor(lang) {
+            const colors = {
+                'Python': '#3572A5',
+                'JavaScript': '#f1e05a',
+                'TypeScript': '#2b7489',
+                'Rust': '#dea584',
+                'Java': '#b07219',
+                'Go': '#00ADD8',
+                'Ruby': '#701516',
+                'C++': '#f34b7d',
+                'HTML': '#e34c26',
+                'CSS': '#563d7c',
+                'Shell': '#89e051',
+                'Django': '#092e20',
+                'Vue': '#41b883',
+                'React': '#61dafb',
+                'default': '#a1a1aa'
+            };
+            return colors[lang] || colors['default'];
+        }
+
+        async function loadRepos() {
+            const repoGrid = document.getElementById('repo-grid');
+            try {
+                let cached = null;
+                try { cached = JSON.parse(sessionStorage.getItem(REPO_CACHE_KEY)); } catch(e){}
+                
+                if (cached && cached.ts && Date.now() - cached.ts < 600000) {
+                    renderRepos(cached.data);
+                    return;
+                }
+
+                const allRepos = [];
+                for (const user of GITHUB_USERS) {
+                    const repos = await fetchGitHub(`users/${user}/repos?sort=updated&per_page=20`);
+                    const filtered = repos
+                        .filter(r => !r.fork && !r.archived)
+                        .sort((a, b) => b.stargazers_count - a.stargazers_count)
+                        .slice(0, 6);
+                    allRepos.push(...filtered.map(r => ({...r, owner_login: user})));
+                }
+
+                allRepos.sort((a, b) => b.stargazers_count - a.stargazers_count);
+                const featured = allRepos.slice(0, 8);
+
+                sessionStorage.setItem(REPO_CACHE_KEY, JSON.stringify({ ts: Date.now(), data: featured }));
+                renderRepos(featured);
+            } catch (err) {
+                repoGrid.innerHTML = `<div class="repo-card col-span-2 text-red-400 text-sm">Failed to load repositories: ${err.message}. <a href="https://github.com/Ishuin" target="_blank" class="underline">View on GitHub →</a></div>`;
+            }
+        }
+
+        function renderRepos(repos) {
+            const repoGrid = document.getElementById('repo-grid');
+            if (!repos || repos.length === 0) {
+                repoGrid.innerHTML = '<div class="repo-card col-span-2 text-gray-500">No public repositories found.</div>';
+                return;
+            }
+            repoGrid.innerHTML = repos.map(repo => {
+                const langColor = getLanguageColor(repo.language);
+                const desc = repo.description || 'No description provided.';
+                const updated = new Date(repo.updated_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                return `
+                <a href="${repo.html_url}" target="_blank" class="repo-card block group">
+                    <div class="flex items-start justify-between gap-4">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-white font-semibold text-sm mb-1 group-hover:text-blue-400 transition-colors truncate">${repo.name}</h4>
+                            <p class="text-gray-500 text-xs leading-relaxed line-clamp-2">${desc}</p>
+                        </div>
+                    </div>
+                    <div class="repo-meta">
+                        ${repo.language ? `<span><span class="activity-dot" style="background:${langColor}; width:8px; height:8px;"></span> ${repo.language}</span>` : ''}
+                        <span><i data-feather="star" class="w-3 h-3"></i> ${renderStars(repo.stargazers_count)}</span>
+                        <span><i data-feather="git-branch" class="w-3 h-3"></i> ${repo.forks_count}</span>
+                        <span class="ml-auto">Updated ${updated}</span>
+                    </div>
+                </a>
+                `;
+            }).join('');
+            feather.replace();
+        }
+
+        // --- ACTIVITY FEED ---
+        async function loadActivity() {
+            const feed = document.getElementById('activity-feed');
+            try {
+                let cached = null;
+                try { cached = JSON.parse(sessionStorage.getItem(ACTIVITY_CACHE_KEY)); } catch(e){}
+                
+                if (cached && cached.ts && Date.now() - cached.ts < 600000) {
+                    renderActivity(cached.data);
+                    return;
+                }
+
+                const events = await fetchGitHub(`users/Ishuin/events/public?per_page=15`);
+                const filtered = events.filter(e => 
+                    ['PushEvent', 'CreateEvent', 'WatchEvent', 'ReleaseEvent', 'IssuesEvent'].includes(e.type)
+                ).slice(0, 8);
+
+                sessionStorage.setItem(ACTIVITY_CACHE_KEY, JSON.stringify({ ts: Date.now(), data: filtered }));
+                renderActivity(filtered);
+            } catch (err) {
+                feed.innerHTML = `<div class="text-red-400 text-xs">Activity unavailable: ${err.message}</div>`;
+            }
+        }
+
+        function renderActivity(events) {
+            const feed = document.getElementById('activity-feed');
+            if (!events || events.length === 0) {
+                feed.innerHTML = '<div class="text-gray-500 text-xs">No recent public activity.</div>';
+                return;
+            }
+            feed.innerHTML = events.map(ev => {
+                const date = new Date(ev.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                let icon, text, repo = ev.repo?.name || '';
+                switch(ev.type) {
+                    case 'PushEvent':
+                        icon = '<span class="text-green-400">●</span>';
+                        text = `Pushed to <span class="text-gray-300">${repo}</span>`;
+                        break;
+                    case 'CreateEvent':
+                        icon = '<span class="text-blue-400">+</span>';
+                        text = `Created <span class="text-gray-300">${ev.payload?.ref_type || 'resource'} ${ev.payload?.ref || ''}</span> in <span class="text-gray-300">${repo}</span>`;
+                        break;
+                    case 'WatchEvent':
+                        icon = '<span class="text-yellow-400">★</span>';
+                        text = `Starred <span class="text-gray-300">${repo}</span>`;
+                        break;
+                    case 'ReleaseEvent':
+                        icon = '<span class="text-purple-400">◆</span>';
+                        text = `Released <span class="text-gray-300">${ev.payload?.release?.name || 'new version'}</span> in <span class="text-gray-300">${repo}</span>`;
+                        break;
+                    case 'IssuesEvent':
+                        icon = '<span class="text-red-400">!</span>';
+                        text = `${ev.payload?.action || 'updated'} issue in <span class="text-gray-300">${repo}</span>`;
+                        break;
+                    default:
+                        icon = '<span class="text-gray-500">·</span>';
+                        text = `Activity in <span class="text-gray-300">${repo}</span>`;
+                }
+                return `<div class="flex gap-3 text-xs border-b border-white/5 pb-3 last:border-0">
+                    <span class="font-mono text-gray-600 whitespace-nowrap">${date}</span>
+                    <span class="font-mono">${icon}</span>
+                    <span class="text-gray-400">${text}</span>
+                </div>`;
+            }).join('');
+        }
+
+        // --- SKILLS ---
+        const skills = [
+            { name: 'Python / Django', level: 95 },
+            { name: 'Cloud (AWS / Azure)', level: 90 },
+            { name: 'System Design', level: 92 },
+            { name: 'Terraform / IaC', level: 85 },
+            { name: 'AI / MCP / RAG', level: 88 },
+            { name: 'Kubernetes / Docker', level: 80 },
+            { name: 'PostgreSQL / Databases', level: 90 },
+            { name: 'FastAPI / REST', level: 92 },
+        ];
+
+        function renderSkills() {
+            const container = document.getElementById('skills-container');
+            container.innerHTML = skills.map(s => `
+                <div>
+                    <div class="flex justify-between text-sm mb-1">
+                        <span class="text-gray-300 font-medium">${s.name}</span>
+                        <span class="text-gray-500 font-mono text-xs">${s.level}%</span>
+                    </div>
+                    <div class="skill-track">
+                        <div class="skill-fill" style="width: 0%" data-width="${s.level}%"></div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Animate after a short delay
+            setTimeout(() => {
+                document.querySelectorAll('.skill-fill').forEach(el => {
+                    el.style.width = el.dataset.width;
+                });
+            }, 300);
+        }
+
+        // --- AI LAB (Gemini) ---
         function switchTab(tab) {
             const btnChat = document.getElementById('btn-chat');
             const btnAudit = document.getElementById('btn-audit');
@@ -581,30 +848,22 @@
             const title = document.getElementById('terminal-title');
 
             if (tab === 'chat') {
-                btnChat.classList.remove('bg-transparent', 'text-gray-400', 'border', 'border-white/10');
-                btnChat.classList.add('bg-blue-600', 'text-white');
-                btnAudit.classList.add('text-gray-400', 'border', 'border-white/10');
-                btnAudit.classList.remove('bg-purple-600', 'text-white');
-                
+                btnChat.className = 'px-4 py-2 text-sm font-mono rounded bg-blue-600 text-white transition-colors';
+                btnAudit.className = 'px-4 py-2 text-sm font-mono rounded border border-white/10 text-gray-400 hover:text-white hover:bg-white/5 transition-colors';
                 viewChat.classList.remove('hidden');
                 viewAudit.classList.add('hidden');
                 title.innerText = 'ishu_digital_twin — ssh session';
             } else {
-                btnAudit.classList.remove('bg-transparent', 'text-gray-400', 'border', 'border-white/10');
-                btnAudit.classList.add('bg-purple-600', 'text-white');
-                btnChat.classList.add('text-gray-400', 'border', 'border-white/10');
-                btnChat.classList.remove('bg-blue-600', 'text-white');
-
+                btnAudit.className = 'px-4 py-2 text-sm font-mono rounded bg-purple-600 text-white transition-colors';
+                btnChat.className = 'px-4 py-2 text-sm font-mono rounded border border-white/10 text-gray-400 hover:text-white hover:bg-white/5 transition-colors';
                 viewAudit.classList.remove('hidden');
                 viewChat.classList.add('hidden');
                 title.innerText = 'system_architect_protocol — analysis';
             }
         }
 
-        // API Key (Runtime Provided)
-        const apiKey = "AIzaSyBheFLpivfngiw-rc2n7-yvH1p1gnQYqrk"; 
+        const apiKey = "AIzaSy...Yqrk";
 
-        // Helper: Call Gemini
         async function callGemini(prompt, systemPrompt) {
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
             const payload = {
@@ -616,11 +875,9 @@
                 const response = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify(payload),
                 });
-                
                 if (!response.ok) throw new Error('API Error');
-                
                 const data = await response.json();
                 return data.candidates?.[0]?.content?.parts?.[0]?.text || "Connection interrupted. Try again.";
             } catch (error) {
@@ -629,14 +886,13 @@
             }
         }
 
-        // --- Chat Feature ---
         const resumeContext = `
         Identity: Ishu Kumar, Technical Lead & Systems Architect.
         Tone: Professional, engineering-focused, concise, slightly technical.
         Experience: 6+ years.
-        Current Role: Technical Lead (Stealth). Leading team of 6. Re-architecting E-commerce platform to Serverless Event-Driven Architecture (Azure Functions). Implemented Grafana Loki for logging.
+        Current Role: Technical Lead (Stealth). Leading team of 6. Re-architecting E-commerce platform to Serverless Event-Driven Architecture (Azure Functions).
         Past Role 1: Senior AI Engineer at Kumolus India (May 2025 - Oct 2025). Led implementation of Model Context Protocol (MCP) in Oracle AI Optimizer.
-        Past Role 2: Senior Software Engineer at CloudBolt (Dec 2021 - Mar 2025). Hybrid Cloud Management (AWS/Azure/VMware). Django & Terraform. Improved stability by 30%.
+        Past Role 2: Senior Software Engineer at CloudBolt (Dec 2021 - Mar 2025). Hybrid Cloud Management (AWS/Azure/VMware). Django & Terraform.
         Past Role 3: Analyst at Deloitte. Python automation (90% manual task reduction).
         Skills: Python, Django, AWS, Azure, Terraform, Kubernetes, MCP, RAG, OpenAI.
         Goal: Discuss technical experience and leadership philosophy with recruiters/engineers.
@@ -653,7 +909,6 @@
             const userText = input.value.trim();
             if (!userText) return;
 
-            // Add User Message
             history.innerHTML += `
                 <div class="chat-message">
                     <span class="chat-user">visitor@portfolio:~$</span> ${userText}
@@ -661,11 +916,9 @@
             `;
             input.value = '';
             
-            // Scroll to bottom
             const container = document.getElementById('terminal-content');
             container.scrollTop = container.scrollHeight;
 
-            // Loading Indicator
             const loaderId = `loader-${Date.now()}`;
             history.innerHTML += `
                 <div class="chat-message" id="${loaderId}">
@@ -674,23 +927,18 @@
             `;
             container.scrollTop = container.scrollHeight;
 
-            // Call API
             const response = await callGemini(userText, resumeContext);
-
-            // Replace Loader
             document.getElementById(loaderId).innerHTML = `
                 <span class="chat-ai">ishu_ai:</span> <span class="text-gray-300">${marked.parseInline(response)}</span>
             `;
             container.scrollTop = container.scrollHeight;
         }
 
-        // --- Audit Feature ---
         const auditContext = `
         Role: Senior System Architect / Staff Engineer.
         Task: Analyze the user's technical problem description.
         Output: A brief, punchy architectural recommendation. Use bold text for key patterns (e.g., **Circuit Breaker**).
         Style: Constructive, high-level, "Systems Thinking". 
-        Example Output: "This sounds like a read-heavy bottleneck. Consider implementing a **Read-Through Cache** pattern with Redis to offload the primary DB, or evaluate **Materialized Views** if real-time consistency isn't critical."
         `;
 
         function handleAudit(e) {
@@ -706,7 +954,6 @@
             const userText = input.value.trim();
             if (!userText) return;
 
-            // Add User Query
             resultArea.innerHTML += `
                 <div class="chat-message border-b border-white/5 pb-2">
                     <span class="text-purple-500 font-mono">>> Input:</span> <span class="text-gray-400 italic">${userText}</span>
@@ -714,7 +961,6 @@
             `;
             input.value = '';
             
-            // Loading
             const loaderId = `audit-loader-${Date.now()}`;
             resultArea.innerHTML += `
                 <div class="chat-message" id="${loaderId}">
@@ -722,16 +968,19 @@
                 </div>
             `;
 
-            // Call API
             const response = await callGemini(userText, auditContext);
-
-            // Show Result
             document.getElementById(loaderId).innerHTML = `
                 <span class="text-purple-500 font-mono">>> Analysis:</span> 
                 <span class="text-white block mt-1 pl-4 border-l-2 border-purple-500/50">${marked.parseInline(response)}</span>
             `;
         }
 
+        // --- INIT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSkills();
+            loadRepos();
+            loadActivity();
+        });
     </script>
 </body>
 </html>
