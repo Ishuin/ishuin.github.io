@@ -517,7 +517,7 @@
         <div class="flex flex-col md:flex-row justify-between items-end mb-12 reveal">
             <div>
                 <h2 class="section-title mb-0">06. The Neural Interface</h2>
-                <h3 class="text-3xl font-bold text-white mt-4">Powered by Gemini ✨</h3>
+                <h3 class="text-3xl font-bold text-white mt-4">Powered by NVIDIA NIM ✨</h3>
             </div>
             <div class="flex gap-4 mt-4 md:mt-0">
                 <button onclick="switchTab('chat')" id="btn-chat" class="px-4 py-2 text-sm font-mono rounded bg-blue-600 text-white transition-colors">./chat_with_ishu.sh</button>
@@ -545,7 +545,7 @@
                         <div class="chat-message">
                             <span class="chat-ai">system:</span> 
                             <span class="text-green-500">Connection established.</span><br>
-                            <span class="text-gray-400">I am Ishu's Digital Twin (powered by Gemini). Ask me about my experience with Azure, my approach to leadership, or how I scaled systems at CloudBolt.</span>
+                            <span class="text-gray-400">I am Ishu's Digital Twin (powered by NVIDIA NIM). Ask me about my experience with Azure, my approach to leadership, or how I scaled systems at CloudBolt.</span>
                         </div>
                     </div>
                     <div class="mt-4 flex items-center border-t border-white/10 pt-4">
@@ -610,7 +610,7 @@
         </div>
         
         <div class="mt-20 text-center text-xs text-gray-600 font-mono">
-            &copy; <span id="year"></span> Ishu Kumar. Engineered with HTML, Tailwind & NVIDIA NIM.
+            &copy; <span id="year"></span> Ishu Kumar. Engineered with HTML, Tailwind & Gemini 2.5 Flash.
         </div>
     </section>
 
@@ -862,22 +862,28 @@
             }
         }
 
-        const PROXY_BASE = "https://ishuin-nim-proxy.onrender.com";
+        const PROXY_BASE = "https://ishuin-nim-proxy.vercel.app";
 
         async function callAI(prompt, systemPrompt) {
             const url = `${PROXY_BASE}/api/chat`;
             try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 8000);
+
                 const response = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ message: prompt, system: systemPrompt }),
+                    signal: controller.signal,
                 });
+                clearTimeout(timeoutId);
+
                 if (!response.ok) throw new Error('API Error');
                 const data = await response.json();
                 return data.text || "Connection interrupted. Try again.";
             } catch (error) {
                 console.error(error);
-                return "Error connecting to AI Neural Link. Please try again later.";
+                return "OFFLINE";
             }
         }
 
@@ -923,8 +929,9 @@
             container.scrollTop = container.scrollHeight;
 
             const response = await callAI(userText, resumeContext);
+            const isOffline = response === "OFFLINE";
             document.getElementById(loaderId).innerHTML = `
-                <span class="chat-ai">ishu_ai:</span> <span class="text-gray-300">${marked.parseInline(response)}</span>
+                <span class="chat-ai">ishu_ai:</span> <span class="text-gray-300">${isOffline ? 'AI chat is offline — email <a href="mailto:ishu.kumars@gmail.com" class="text-blue-400 underline">ishu.kumars@gmail.com</a> directly.' : marked.parseInline(response)}</span>
             `;
             container.scrollTop = container.scrollHeight;
         }
@@ -964,9 +971,10 @@
             `;
 
             const response = await callAI(userText, auditContext);
+            const isOffline = response === "OFFLINE";
             document.getElementById(loaderId).innerHTML = `
                 <span class="text-purple-500 font-mono">>> Analysis:</span> 
-                <span class="text-white block mt-1 pl-4 border-l-2 border-purple-500/50">${marked.parseInline(response)}</span>
+                <span class="text-white block mt-1 pl-4 border-l-2 border-purple-500/50">${isOffline ? 'AI analysis offline — email <a href="mailto:ishu.kumars@gmail.com" class="text-blue-400 underline">ishu.kumars@gmail.com</a>.' : marked.parseInline(response)}</span>
             `;
         }
 
