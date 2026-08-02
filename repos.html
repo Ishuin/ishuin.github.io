@@ -159,6 +159,7 @@
                 <a href="/#about" class="hover:text-white transition-colors">Philosophy</a>
                 <a href="/#projects" class="hover:text-white transition-colors">Projects</a>
                 <a href="/repos.html" class="hover:text-blue-400 transition-colors text-white">All Repos</a>
+                <a href="/#contact" class="hover:text-white transition-colors">Contact</a>
             </div>
             <div class="flex items-center gap-4">
                 <a href="https://github.com/Ishuin" target="_blank" class="text-gray-400 hover:text-white transition-colors">
@@ -166,6 +167,9 @@
                 </a>
                 <a href="https://linkedin.com/in/ishukumars" target="_blank" class="text-gray-400 hover:text-white transition-colors">
                     <i data-feather="linkedin" class="w-5 h-5"></i>
+                </a>
+                <a href="Ishu_Resume_2026.pdf" download class="hidden sm:flex items-center gap-2 px-4 py-1.5 rounded-md bg-white text-black text-xs font-bold tracking-wide hover:bg-gray-200 transition-colors">
+                    RESUME
                 </a>
             </div>
         </div>
@@ -235,9 +239,42 @@
         </div>
     </section>
 
-    <footer class="py-20 px-6 max-w-6xl mx-auto border-t border-white/10 text-center">
-        <p class="text-xs text-gray-600 font-mono">&copy; <span id="year"></span> Ishu Kumar. Built with GitHub Pages, Tailwind, and vanilla JS.</p>
-    </footer>
+    <section id="contact" class="py-32 px-6 max-w-6xl mx-auto border-t border-white/10">
+        <div class="grid md:grid-cols-2 gap-16 items-center reveal">
+            <div>
+                <h2 class="text-4xl font-bold text-white mb-6">Ready to build?</h2>
+                <p class="text-gray-400 mb-8 max-w-md">
+                    I am always interested in discussing technical leadership roles, complex backend challenges, and the future of AI infrastructure.
+                </p>
+                <a href="mailto:ishu.kumars@gmail.com" class="inline-flex items-center gap-2 text-white border-b border-white pb-1 hover:text-blue-400 hover:border-blue-400 transition-colors">
+                    ishu.kumars@gmail.com
+                    <i data-feather="arrow-up-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <a href="https://linkedin.com/in/ishukumars" target="_blank" class="repo-card p-6 rounded-xl flex flex-col justify-between h-32 hover:bg-white/5 transition-colors group">
+                    <i data-feather="linkedin" class="text-gray-400 group-hover:text-blue-400 transition-colors"></i>
+                    <span class="text-sm font-medium text-white">LinkedIn</span>
+                </a>
+                <a href="https://github.com/Ishuin" target="_blank" class="repo-card p-6 rounded-xl flex flex-col justify-between h-32 hover:bg-white/5 transition-colors group">
+                    <i data-feather="github" class="text-gray-400 group-hover:text-white transition-colors"></i>
+                    <span class="text-sm font-medium text-white">GitHub</span>
+                </a>
+                <a href="Ishu_Resume_2026.pdf" download class="repo-card p-6 rounded-xl flex flex-col justify-between h-32 hover:bg-white/5 transition-colors group col-span-2">
+                    <i data-feather="file-text" class="text-gray-400 group-hover:text-green-400 transition-colors"></i>
+                    <div class="flex justify-between items-end">
+                        <span class="text-sm font-medium text-white">Download Resume (PDF)</span>
+                        <i data-feather="download" class="w-4 h-4 text-gray-500"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="mt-20 text-center text-xs text-gray-600 font-mono">
+            &copy; <span id="year"></span> Ishu Kumar. Built with GitHub Pages, Tailwind, and vanilla JS.
+        </div>
+    </section>
 
     <script>
         feather.replace();
