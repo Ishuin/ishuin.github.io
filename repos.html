@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repositories | Ishu Kumar</title>
+    <meta name="description" content="All public repositories for Ishu Kumar and nexfini.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        :root {
+            --bg-body: #050505;
+            --bg-card: #0a0a0a;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-main: #ededed;
+            --text-muted: #a1a1aa;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-green: #10b981;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .ambient-glow {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0; left: 0;
+            background:
+                radial-gradient(circle at 15% 50%, rgba(56, 189, 248, 0.07), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.07), transparent 25%),
+                radial-gradient(circle at 50% 80%, rgba(16, 185, 129, 0.04), transparent 30%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .grid-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+            background-size: 60px 60px;
+            mask-image: radial-gradient(circle at center, black 30%, transparent 100%);
+            -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 100%);
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .glass-nav {
+            background: rgba(5, 5, 5, 0.75);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .repo-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            transition: border-color 0.3s, transform 0.2s;
+        }
+        .repo-card:hover {
+            border-color: rgba(255,255,255,0.18);
+            transform: translateY(-2px);
+        }
+        .repo-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.75rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .repo-meta span { display: inline-flex; align-items: center; gap: 0.25rem; }
+
+        .activity-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 0.25rem;
+        }
+
+        .section-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .section-title::after {
+            content: '';
+            height: 1px;
+            flex-grow: 1;
+            background: linear-gradient(to right, var(--border-color), transparent);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .chip {
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 0.35rem 0.7rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            background: rgba(255,255,255,0.02);
+            transition: all 0.2s;
+        }
+        .chip:hover { border-color: rgba(255,255,255,0.2); color: white; }
+        .chip.active { background: rgba(255,255,255,0.08); color: white; border-color: rgba(255,255,255,0.25); }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <div class="ambient-glow"></div>
+    <div class="grid-bg"></div>
+
+    <nav class="glass-nav fixed top-0 w-full z-50">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="/" class="font-mono font-bold text-white tracking-tighter text-lg hover:text-blue-400 transition-colors">
+                IK<span class="text-gray-600">_SYS</span>
+            </a>
+            <div class="hidden md:flex gap-8 text-sm font-medium text-gray-400">
+                <a href="/" class="hover:text-white transition-colors">Home</a>
+                <a href="/#about" class="hover:text-white transition-colors">Philosophy</a>
+                <a href="/#projects" class="hover:text-white transition-colors">Projects</a>
+                <a href="/repos.html" class="hover:text-blue-400 transition-colors text-white">All Repos</a>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="https://github.com/Ishuin" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                    <i data-feather="github" class="w-5 h-5"></i>
+                </a>
+                <a href="https://linkedin.com/in/ishukumars" target="_blank" class="text-gray-400 hover:text-white transition-colors">
+                    <i data-feather="linkedin" class="w-5 h-5"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="pt-40 pb-20 px-6 max-w-6xl mx-auto">
+        <div class="max-w-4xl reveal">
+            <h1 class="text-5xl md:text-7xl font-bold tracking-tighter text-white mb-4">Repositories</h1>
+            <p class="text-xl text-gray-400 max-w-2xl leading-relaxed">
+                A centralized view of all public repositories from <span class="text-white">Ishuin</span> and <span class="text-white">nexfini</span>.
+                Each entry includes project details, architecture overview, and local environment setup notes where available.
+            </p>
+        </div>
+
+        <div class="mt-8 reveal">
+            <div class="flex flex-wrap gap-3" id="language-filters">
+                <button class="chip active" data-lang="all">All</button>
+                <button class="chip" data-lang="Python">Python</button>
+                <button class="chip" data-lang="TypeScript">TypeScript</button>
+                <button class="chip" data-lang="JavaScript">JavaScript</button>
+                <button class="chip" data-lang="Rust">Rust</button>
+                <button class="chip" data-lang="Kotlin">Kotlin</button>
+                <button class="chip" data-lang="HTML">HTML</button>
+                <button class="chip" data-lang="Shell">Shell</button>
+                <button class="chip" data-lang="Svelte">Svelte</button>
+                <button class="chip" data-lang="CSS">CSS</button>
+                <button class="chip" data-lang="Java">Java</button>
+                <button class="chip" data-lang="C">C</button>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-12 px-6 max-w-6xl mx-auto">
+        <div class="grid md:grid-cols-2 gap-6 reveal" id="repo-grid">
+            <div class="repo-card flex items-center justify-center h-32 text-gray-500 text-sm">Loading repositories...</div>
+        </div>
+    </section>
+
+    <section class="py-24 px-6 max-w-6xl mx-auto border-t border-white/10">
+        <h2 class="section-title reveal">Local Environment Setup</h2>
+        <div class="reveal grid md:grid-cols-3 gap-6">
+            <div class="repo-card">
+                <h4 class="text-white font-semibold mb-2">Clone</h4>
+                <p class="text-gray-500 text-sm mb-3">Clone any repository to your local machine.</p>
+                <code class="block text-xs font-mono text-gray-300 bg-black/40 p-3 rounded border border-white/5">
+                    git clone https://github.com/Ishuin/&lt;repo&gt;.git<br>
+                    cd &lt;repo&gt;
+                </code>
+            </div>
+            <div class="repo-card">
+                <h4 class="text-white font-semibold mb-2">Virtual Environment</h4>
+                <p class="text-gray-500 text-sm mb-3">Use Python venv or conda for Python projects.</p>
+                <code class="block text-xs font-mono text-gray-300 bg-black/40 p-3 rounded border border-white/5">
+                    python -m venv .venv<br>
+                    source .venv/bin/activate<br>
+                    pip install -r requirements.txt
+                </code>
+            </div>
+            <div class="repo-card">
+                <h4 class="text-white font-semibold mb-2">Node / Frontend</h4>
+                <p class="text-gray-500 text-sm mb-3">Install dependencies and run dev server.</p>
+                <code class="block text-xs font-mono text-gray-300 bg-black/40 p-3 rounded border border-white/5">
+                    npm install<br>
+                    npm run dev
+                </code>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-20 px-6 max-w-6xl mx-auto border-t border-white/10 text-center">
+        <p class="text-xs text-gray-600 font-mono">&copy; <span id="year"></span> Ishu Kumar. Built with GitHub Pages, Tailwind, and vanilla JS.</p>
+    </footer>
+
+    <script>
+        feather.replace();
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        const GITHUB_USERS = ['Ishuin', 'nexfini'];
+        const CACHE_KEY = 'ishuin_all_repos_v1';
+        let allRepos = [];
+        let currentFilter = 'all';
+
+        async function fetchGitHub(endpoint) {
+            const res = await fetch(`https://api.github.com/${endpoint}`);
+            if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
+            return res.json();
+        }
+
+        function getLanguageColor(lang) {
+            const colors = {
+                'Python': '#3572A5',
+                'JavaScript': '#f1e05a',
+                'TypeScript': '#2b7489',
+                'Rust': '#dea584',
+                'Java': '#b07219',
+                'Kotlin': '#A97BFF',
+                'Go': '#00ADD8',
+                'Ruby': '#701516',
+                'C++': '#f34b7d',
+                'C': '#555555',
+                'HTML': '#e34c26',
+                'CSS': '#563d7c',
+                'Shell': '#89e051',
+                'Svelte': '#FF3E00',
+                'Django': '#092e20',
+                'Vue': '#41b883',
+                'React': '#61dafb',
+                'default': '#a1a1aa'
+            };
+            return colors[lang] || colors['default'];
+        }
+
+        function renderStars(stars) {
+            if (stars >= 1000) return (stars / 1000).toFixed(1) + 'k';
+            return stars.toString();
+        }
+
+        function cardHTML(repo) {
+            const langColor = getLanguageColor(repo.language);
+            const desc = repo.description || 'No description provided.';
+            const updated = new Date(repo.updated_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            const name = repo.name;
+            const url = repo.html_url;
+            const language = repo.language || '';
+            const stars = renderStars(repo.stargazers_count);
+            const forks = repo.forks_count;
+
+            return `
+            <a href="${url}" target="_blank" class="repo-card block group">
+                <div class="flex items-start justify-between gap-4">
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-white font-semibold text-sm mb-1 group-hover:text-blue-400 transition-colors truncate">${name}</h4>
+                        <p class="text-gray-500 text-xs leading-relaxed line-clamp-2">${desc}</p>
+                    </div>
+                </div>
+                <div class="repo-meta">
+                    ${language ? `<span><span class="activity-dot" style="background:${langColor}; width:8px; height:8px;"></span> ${language}</span>` : ''}
+                    <span><i data-feather="star" class="w-3 h-3"></i> ${stars}</span>
+                    <span><i data-feather="git-branch" class="w-3 h-3"></i> ${forks}</span>
+                    <span class="ml-auto">Updated ${updated}</span>
+                </div>
+                <div class="mt-3 text-[11px] text-gray-600 font-mono">
+                    Architecture & setup details: see README in repo.
+                </div>
+            </a>
+            `;
+        }
+
+        async function loadRepos() {
+            const grid = document.getElementById('repo-grid');
+            try {
+                let cached = null;
+                try { cached = JSON.parse(sessionStorage.getItem(CACHE_KEY)); } catch (e) { }
+                if (cached && cached.ts && Date.now() - cached.ts < 600000) {
+                    allRepos = cached.data;
+                    render();
+                    return;
+                }
+
+                const results = await Promise.all(GITHUB_USERS.map(u => fetchGitHub(`users/${u}/repos?per_page=100&sort=updated`)));
+                const combined = results.flat();
+                allRepos = combined.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+                sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: allRepos }));
+                render();
+            } catch (err) {
+                grid.innerHTML = `<div class="repo-card col-span-2 text-red-400 text-sm">Failed to load repositories: ${err.message}. <a href="https://github.com/Ishuin" target="_blank" class="underline">View on GitHub →</a></div>`;
+            }
+        }
+
+        function render() {
+            const grid = document.getElementById('repo-grid');
+            const q = currentFilter.toLowerCase();
+            const filtered = allRepos.filter(r => {
+                if (q === 'all') return true;
+                const lang = (r.language || '').toLowerCase();
+                return lang === q;
+            });
+
+            if (!filtered.length) {
+                grid.innerHTML = '<div class="repo-card col-span-2 text-gray-500">No repositories found for this filter.</div>';
+                return;
+            }
+
+            grid.innerHTML = filtered.map(cardHTML).join('');
+            feather.replace();
+        }
+
+        document.getElementById('language-filters').addEventListener('click', (e) => {
+            const btn = e.target.closest('button[data-lang]');
+            if (!btn) return;
+            currentFilter = btn.dataset.lang;
+            document.querySelectorAll('#language-filters .chip').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            render();
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.08 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        document.addEventListener('DOMContentLoaded', () => loadRepos());
+    </script>
+</body>
+</html>
