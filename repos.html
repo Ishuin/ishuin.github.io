@@ -6,8 +6,12 @@
     <title>Repositories | Ishu Kumar</title>
     <meta name="description" content="All public repositories for Ishu Kumar and nexfini.">
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Feather Icons -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Markdown Parser -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -142,6 +146,10 @@
             border-color: rgba(255,255,255,0.18);
             transform: translateY(-2px);
         }
+        .repo-card.expanded {
+            border-color: rgba(255,255,255,0.25);
+            transform: none;
+        }
         .repo-meta {
             display: flex;
             gap: 1rem;
@@ -152,6 +160,112 @@
             flex-wrap: wrap;
         }
         .repo-meta span { display: inline-flex; align-items: center; gap: 0.25rem; }
+
+        .repo-topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 0.6rem;
+        }
+        .repo-topic {
+            font-size: 0.65rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.08);
+            color: var(--text-muted);
+            background: rgba(255,255,255,0.02);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .repo-readme {
+            display: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            animation: fadeIn 0.3s ease;
+        }
+        .repo-card.expanded .repo-readme {
+            display: block;
+        }
+        .repo-readme h1, .repo-readme h2, .repo-readme h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: white;
+            margin: 0.75rem 0 0.4rem;
+        }
+        .repo-readme p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+        .repo-readme code {
+            font-size: 0.75rem;
+            background: rgba(255,255,255,0.05);
+            padding: 0.15rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .repo-readme pre {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            overflow-x: auto;
+            margin: 0.5rem 0;
+        }
+        .repo-readme pre code {
+            background: transparent;
+            padding: 0;
+            font-size: 0.75rem;
+            color: #d1d5db;
+        }
+        .repo-readme ul, .repo-readme ol {
+            padding-left: 1.25rem;
+            margin: 0.5rem 0;
+        }
+        .repo-readme li {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+        .repo-readme a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+        .repo-readme a:hover {
+            text-decoration: underline;
+        }
+        .repo-readme blockquote {
+            border-left: 3px solid var(--accent-purple);
+            padding-left: 0.75rem;
+            color: var(--text-muted);
+            font-style: italic;
+            margin: 0.5rem 0;
+        }
+        .readme-toggle {
+            font-size: 0.7rem;
+            color: var(--accent-blue);
+            cursor: pointer;
+            user-select: none;
+            margin-top: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        .readme-toggle:hover {
+            color: #60a5fa;
+        }
+        .readme-loading {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         .activity-dot {
             width: 10px; height: 10px;
@@ -245,13 +359,22 @@
             <h1 class="text-5xl md:text-7xl font-bold tracking-tighter text-white mb-4">Repositories</h1>
             <p class="text-xl text-gray-400 max-w-2xl leading-relaxed">
                 A centralized view of all public repositories from <span class="text-white">Ishuin</span> and <span class="text-white">nexfini</span>.
-                Each entry includes project details, architecture overview, and local environment setup notes where available.
+                Search, filter by language, or preview READMEs without leaving this page.
             </p>
         </div>
 
         <div class="mt-8 reveal">
-            <div class="flex flex-wrap gap-3" id="language-filters">
-                <button class="chip active" data-lang="all">All</button>
+            <div class="flex flex-col md:flex-row md:items-center gap-4">
+                <input type="text" id="repo-search" placeholder="Search repositories..."
+                    class="w-full md:w-96 bg-black/30 border border-white/10 rounded-lg px-4 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/50 transition-colors" />
+                <div class="flex flex-wrap gap-2" id="owner-filters">
+                    <button class="chip active" data-owner="all">All owners</button>
+                    <button class="chip" data-owner="Ishuin">Ishuin</button>
+                    <button class="chip" data-owner="nexfini">Nexfini</button>
+                </div>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-3" id="language-filters">
+                <button class="chip active" data-lang="all">All languages</button>
                 <button class="chip" data-lang="Python">Python</button>
                 <button class="chip" data-lang="TypeScript">TypeScript</button>
                 <button class="chip" data-lang="JavaScript">JavaScript</button>
@@ -264,11 +387,12 @@
                 <button class="chip" data-lang="Java">Java</button>
                 <button class="chip" data-lang="C">C</button>
             </div>
+            <div class="mt-3 text-xs text-gray-500 font-mono" id="repo-count"></div>
         </div>
     </header>
 
     <section class="py-12 px-6 max-w-6xl mx-auto">
-        <div class="grid md:grid-cols-2 gap-6 reveal" id="repo-grid">
+        <div class="grid md:grid-cols-3 gap-6 reveal" id="repo-grid">
             <div class="repo-card flex items-center justify-center h-32 text-gray-500 text-sm">Loading repositories...</div>
         </div>
     </section>
@@ -346,14 +470,22 @@
         document.getElementById('year').textContent = new Date().getFullYear();
 
         const GITHUB_USERS = ['Ishuin', 'nexfini'];
-        const CACHE_KEY = 'ishuin_all_repos_v1';
+        const CACHE_KEY = 'ishuin_repos_page_v1';
+        const ACTIVITY_CACHE_KEY = 'ishuin_portfolio_activity';
         let allRepos = [];
         let currentFilter = 'all';
+        let currentOwner = 'all';
+        let currentQuery = '';
 
         async function fetchGitHub(endpoint) {
             const res = await fetch(`https://api.github.com/${endpoint}`);
             if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
             return res.json();
+        }
+
+        function renderStars(stars) {
+            if (stars >= 1000) return (stars / 1000).toFixed(1) + 'k';
+            return stars.toString();
         }
 
         function getLanguageColor(lang) {
@@ -380,45 +512,53 @@
             return colors[lang] || colors['default'];
         }
 
-        function renderStars(stars) {
-            if (stars >= 1000) return (stars / 1000).toFixed(1) + 'k';
-            return stars.toString();
-        }
-
         function cardHTML(repo) {
             const langColor = getLanguageColor(repo.language);
             const desc = repo.description || 'No description provided.';
             const updated = new Date(repo.updated_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-            const name = repo.name;
-            const url = repo.html_url;
-            const language = repo.language || '';
-            const stars = renderStars(repo.stargazers_count);
-            const forks = repo.forks_count;
+            const topics = Array.isArray(repo.topics) ? repo.topics.filter(t => t && !['readme', 'description', 'documentation'].includes(t.toLowerCase())).slice(0, 6) : [];
+            const hasTopics = topics.length > 0;
 
             return `
-            <a href="${url}" target="_blank" class="repo-card block group">
-                <div class="flex items-start justify-between gap-4">
-                    <div class="flex-1 min-w-0">
-                        <h4 class="text-white font-semibold text-sm mb-1 group-hover:text-blue-400 transition-colors truncate">${name}</h4>
-                        <p class="text-gray-500 text-xs leading-relaxed line-clamp-2">${desc}</p>
+            <div class="repo-card" data-repo="${repo.full_name}" data-owner="${(repo.owner && repo.owner.login) || ''}">
+                <a href="${repo.html_url}" target="_blank" class="block group" onclick="event.stopPropagation()">
+                    <div class="flex items-start justify-between gap-4">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-white font-semibold text-sm mb-1 group-hover:text-blue-400 transition-colors truncate">${repo.name}</h4>
+                            <p class="text-gray-500 text-xs leading-relaxed line-clamp-2">${desc}</p>
+                        </div>
                     </div>
+                </a>
+                <div class="repo-topics">
+                    ${hasTopics ? topics.map(t => `<span class="repo-topic">${escapeHtml(t)}</span>`).join('') : ''}
                 </div>
                 <div class="repo-meta">
-                    ${language ? `<span><span class="activity-dot" style="background:${langColor}; width:8px; height:8px;"></span> ${language}</span>` : ''}
-                    <span><i data-feather="star" class="w-3 h-3"></i> ${stars}</span>
-                    <span><i data-feather="git-branch" class="w-3 h-3"></i> ${forks}</span>
+                    ${repo.language ? `<span><span class="activity-dot" style="background:${langColor}; width:8px; height:8px;"></span> ${repo.language}</span>` : ''}
+                    <span><i data-feather="star" class="w-3 h-3"></i> ${renderStars(repo.stargazers_count)}</span>
+                    <span><i data-feather="git-branch" class="w-3 h-3"></i> ${repo.forks_count}</span>
                     <span class="ml-auto">Updated ${updated}</span>
                 </div>
-                <div class="mt-3 text-[11px] text-gray-600 font-mono"></div>
-            </a>
+                <div class="readme-toggle" data-repo="${repo.full_name}" data-owner="${(repo.owner && repo.owner.login) || ''}">
+                    <span>▶</span> README preview
+                </div>
+                <div class="repo-readme" id="readme-${repo.full_name.replace('/', '-')}">
+                    <div class="readme-loading">Loading README...</div>
+                </div>
+            </div>
             `;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         async function loadRepos() {
             const grid = document.getElementById('repo-grid');
             try {
                 let cached = null;
-                try { cached = JSON.parse(sessionStorage.getItem(CACHE_KEY)); } catch (e) { }
+                try { cached = JSON.parse(sessionStorage.getItem(CACHE_KEY)); } catch (e) {}
                 if (cached && cached.ts && Date.now() - cached.ts < 600000) {
                     allRepos = cached.data;
                     render();
@@ -431,28 +571,101 @@
                 sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: allRepos }));
                 render();
             } catch (err) {
-                grid.innerHTML = `<div class="repo-card col-span-2 text-red-400 text-sm">Failed to load repositories: ${err.message}. <a href="https://github.com/Ishuin" target="_blank" class="underline">View on GitHub →</a></div>`;
+                grid.innerHTML = `<div class="repo-card col-span-3 text-red-400 text-sm">Failed to load repositories: ${err.message}. <a href="https://github.com/Ishuin" target="_blank" class="underline">View on GitHub →</a></div>`;
             }
+        }
+
+        function getFilteredRepos() {
+            return allRepos.filter(r => {
+                const owner = (r.owner && r.owner.login) || '';
+                const name = (r.name || '').toLowerCase();
+                const desc = (r.description || '').toLowerCase();
+                const query = currentQuery.toLowerCase();
+
+                if (currentOwner !== 'all' && owner !== currentOwner) return false;
+                if (currentFilter !== 'all' && (r.language || '').toLowerCase() !== currentFilter.toLowerCase()) return false;
+                if (query && !name.includes(query) && !desc.includes(query)) return false;
+                return true;
+            });
         }
 
         function render() {
             const grid = document.getElementById('repo-grid');
-            const q = currentFilter.toLowerCase();
-            const filtered = allRepos.filter(r => {
-                if (q === 'all') return true;
-                const lang = (r.language || '').toLowerCase();
-                return lang === q;
-            });
+            const filtered = getFilteredRepos();
+            document.getElementById('repo-count').textContent = `${filtered.length} repository${filtered.length === 1 ? '' : 'ies'}`;
 
             if (!filtered.length) {
-                grid.innerHTML = '<div class="repo-card col-span-2 text-gray-500">No repositories found for this filter.</div>';
+                grid.innerHTML = '<div class="repo-card col-span-3 text-gray-500">No repositories match your filters.</div>';
                 return;
             }
 
-            grid.innerHTML = filtered.map(cardHTML).join('');
+            grid.innerHTML = filtered.map(repo => cardHTML(repo)).join('');
             feather.replace();
+            attachCardListeners();
         }
 
+        function attachCardListeners() {
+            document.querySelectorAll('#repo-grid .repo-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    if (e.target.closest('a') || e.target.closest('.readme-toggle')) return;
+                    const fullName = card.dataset.repo;
+                    const safeId = fullName.replace('/', '-');
+                    const readmeEl = document.getElementById(`readme-${safeId}`);
+                    const toggleEl = card.querySelector('.readme-toggle');
+                    if (!readmeEl) return;
+
+                    if (card.classList.contains('expanded')) {
+                        card.classList.remove('expanded');
+                        readmeEl.style.display = 'none';
+                        if (toggleEl) toggleEl.innerHTML = '<span>▶</span> README preview';
+                    } else {
+                        card.classList.add('expanded');
+                        readmeEl.style.display = 'block';
+                        if (toggleEl) toggleEl.innerHTML = '<span>▼</span> Hide README';
+                        loadReadme(fullName, safeId);
+                    }
+                });
+            });
+
+            document.querySelectorAll('#repo-grid .readme-toggle').forEach(toggle => {
+                toggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const fullName = toggle.dataset.repo;
+                    const safeId = fullName.replace('/', '-');
+                    const readmeEl = document.getElementById(`readme-${safeId}`);
+                    const card = toggle.closest('.repo-card');
+                    if (!readmeEl || !card) return;
+
+                    if (card.classList.contains('expanded')) {
+                        card.classList.remove('expanded');
+                        readmeEl.style.display = 'none';
+                        toggle.innerHTML = '<span>▶</span> README preview';
+                    } else {
+                        card.classList.add('expanded');
+                        readmeEl.style.display = 'block';
+                        toggle.innerHTML = '<span>▼</span> Hide README';
+                        loadReadme(fullName, safeId);
+                    }
+                });
+            });
+        }
+
+        async function loadReadme(fullName, safeId) {
+            const readmeEl = document.getElementById(`readme-${safeId}`);
+            if (!readmeEl || readmeEl.dataset.loaded === 'true') return;
+
+            try {
+                const [owner, repo] = fullName.split('/');
+                const data = await fetchGitHub(`repos/${owner}/${repo}/readme`);
+                const content = atob(data.content.replace(/\n/g, ''));
+                readmeEl.innerHTML = marked.parse(content, { breaks: true, headerIds: false, mangle: false });
+                readmeEl.dataset.loaded = 'true';
+            } catch (err) {
+                readmeEl.innerHTML = `<div class="readme-loading text-red-400">README unavailable: ${err.message}</div>`;
+            }
+        }
+
+        // Filters
         document.getElementById('language-filters').addEventListener('click', (e) => {
             const btn = e.target.closest('button[data-lang]');
             if (!btn) return;
@@ -462,6 +675,21 @@
             render();
         });
 
+        document.getElementById('owner-filters').addEventListener('click', (e) => {
+            const btn = e.target.closest('button[data-owner]');
+            if (!btn) return;
+            currentOwner = btn.dataset.owner;
+            document.querySelectorAll('#owner-filters .chip').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            render();
+        });
+
+        document.getElementById('repo-search').addEventListener('input', (e) => {
+            currentQuery = e.target.value.trim();
+            render();
+        });
+
+        // Reveal observer
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) entry.target.classList.add('visible');
@@ -469,7 +697,7 @@
         }, { threshold: 0.08 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        document.addEventListener('DOMContentLoaded', () => loadRepos());
+        document.addEventListener('DOMContentLoaded', loadRepos);
     </script>
 </body>
 </html>
