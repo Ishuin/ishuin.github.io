@@ -464,6 +464,54 @@
         /* --- Brutalist link underline --- */
         a { text-decoration: none; }
         a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 2px; }
+
+        /* --- Glitch text --- */
+        .glitch {
+            position: relative;
+        }
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            opacity: 0;
+        }
+        .glitch::before {
+            color: var(--accent-blue);
+            z-index: -1;
+        }
+        .glitch::after {
+            color: var(--accent-purple);
+            z-index: -2;
+        }
+        .glitch:hover::before {
+            opacity: 0.8;
+            transform: translate(-2px, -1px);
+            animation: glitchA 0.3s steps(2) infinite;
+        }
+        .glitch:hover::after {
+            opacity: 0.8;
+            transform: translate(2px, 1px);
+            animation: glitchB 0.3s steps(2) infinite;
+        }
+        @keyframes glitchA {
+            0% { clip-path: inset(20% 0 30% 0); transform: translate(-2px, -1px); }
+            50% { clip-path: inset(50% 0 10% 0); transform: translate(2px, 1px); }
+            100% { clip-path: inset(10% 0 60% 0); transform: translate(-1px, 2px); }
+        }
+        @keyframes glitchB {
+            0% { clip-path: inset(60% 0 5% 0); transform: translate(2px, 1px); }
+            50% { clip-path: inset(10% 0 50% 0); transform: translate(-2px, -1px); }
+            100% { clip-path: inset(40% 0 20% 0); transform: translate(1px, -2px); }
+        }
+
+        /* --- Utility --- */
+        .brutalist-divider {
+            border: none;
+            border-top: 2px solid rgba(255,255,255,0.25);
+            margin: 2.5rem 0;
+        }
     </style>
 </head>
 <body>
