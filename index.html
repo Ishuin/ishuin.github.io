@@ -253,10 +253,15 @@
             border-radius: 0.75rem;
             padding: 1.25rem;
             transition: border-color 0.3s, transform 0.2s;
+            cursor: pointer;
         }
         .repo-card:hover {
             border-color: rgba(255,255,255,0.18);
             transform: translateY(-2px);
+        }
+        .repo-card.expanded {
+            border-color: rgba(255,255,255,0.25);
+            transform: none;
         }
         .repo-meta {
             display: flex;
@@ -265,9 +270,117 @@
             color: var(--text-muted);
             margin-top: 0.75rem;
             align-items: center;
+            flex-wrap: wrap;
         }
         .repo-meta span { display: inline-flex; align-items: center; gap: 0.25rem; }
 
+        /* --- Repo Topics --- */
+        .repo-topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 0.6rem;
+        }
+        .repo-topic {
+            font-size: 0.65rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.08);
+            color: var(--text-muted);
+            background: rgba(255,255,255,0.02);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* --- README Preview --- */
+        .repo-readme {
+            display: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            animation: fadeIn 0.3s ease;
+        }
+        .repo-card.expanded .repo-readme {
+            display: block;
+        }
+        .repo-readme h1, .repo-readme h2, .repo-readme h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: white;
+            margin: 0.75rem 0 0.4rem;
+        }
+        .repo-readme p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+        .repo-readme code {
+            font-size: 0.75rem;
+            background: rgba(255,255,255,0.05);
+            padding: 0.15rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .repo-readme pre {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            overflow-x: auto;
+            margin: 0.5rem 0;
+        }
+        .repo-readme pre code {
+            background: transparent;
+            padding: 0;
+            font-size: 0.75rem;
+            color: #d1d5db;
+        }
+        .repo-readme ul, .repo-readme ol {
+            padding-left: 1.25rem;
+            margin: 0.5rem 0;
+        }
+        .repo-readme li {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+        }
+        .repo-readme a {
+            color: var(--accent-blue);
+            text-decoration: none;
+        }
+        .repo-readme a:hover {
+            text-decoration: underline;
+        }
+        .repo-readme blockquote {
+            border-left: 3px solid var(--accent-purple);
+            padding-left: 0.75rem;
+            color: var(--text-muted);
+            font-style: italic;
+            margin: 0.5rem 0;
+        }
+        .readme-toggle {
+            font-size: 0.7rem;
+            color: var(--accent-blue);
+            cursor: pointer;
+            user-select: none;
+            margin-top: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        .readme-toggle:hover {
+            color: #60a5fa;
+        }
+        .readme-loading {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
         /* --- Skill Bar --- */
         .skill-track {
             height: 6px;
@@ -783,17 +896,25 @@
                 repoGrid.innerHTML = '<div class="repo-card col-span-2 text-gray-500">No public repositories found.</div>';
                 return;
             }
-            repoGrid.innerHTML = repos.map(repo => {
+            repoGrid.innerHTML = repos.map((repo, index) => {
                 const langColor = getLanguageColor(repo.language);
                 const desc = repo.description || 'No description provided.';
                 const updated = new Date(repo.updated_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                const topics = Array.isArray(repo.topics) ? repo.topics.filter(t => t && !['readme', 'description', 'documentation'].includes(t.toLowerCase())).slice(0, 6) : [];
+                const hasTopics = topics.length > 0;
+
                 return `
-                <a href="${repo.html_url}" target="_blank" class="repo-card block group">
-                    <div class="flex items-start justify-between gap-4">
-                        <div class="flex-1 min-w-0">
-                            <h4 class="text-white font-semibold text-sm mb-1 group-hover:text-blue-400 transition-colors truncate">${repo.name}</h4>
-                            <p class="text-gray-500 text-xs leading-relaxed line-clamp-2">${desc}</p>
+                <div class="repo-card" data-repo="${repo.full_name}" data-index="${index}">
+                    <a href="${repo.html_url}" target="_blank" class="block group" onclick="event.stopPropagation()">
+                        <div class="flex items-start justify-between gap-4">
+                            <div class="flex-1 min-w-0">
+                                <h4 class="text-white font-semibold text-sm mb-1 group-hover:text-blue-400 transition-colors truncate">${repo.name}</h4>
+                                <p class="text-gray-500 text-xs leading-relaxed line-clamp-2">${desc}</p>
+                            </div>
                         </div>
+                    </a>
+                    <div class="repo-topics">
+                        ${hasTopics ? topics.map(t => `<span class="repo-topic">${escapeHtml(t)}</span>`).join('') : ''}
                     </div>
                     <div class="repo-meta">
                         ${repo.language ? `<span><span class="activity-dot" style="background:${langColor}; width:8px; height:8px;"></span> ${repo.language}</span>` : ''}
@@ -801,10 +922,86 @@
                         <span><i data-feather="git-branch" class="w-3 h-3"></i> ${repo.forks_count}</span>
                         <span class="ml-auto">Updated ${updated}</span>
                     </div>
-                </a>
+                    <div class="readme-toggle" data-repo="${repo.full_name}" data-index="${index}">
+                        <span>▶</span> README preview
+                    </div>
+                    <div class="repo-readme" id="readme-${index}">
+                        <div class="readme-loading">Loading README...</div>
+                    </div>
+                </div>
                 `;
             }).join('');
             feather.replace();
+
+            // Attach click handlers for expand/collapse
+            repoGrid.querySelectorAll('.repo-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    if (e.target.closest('a') || e.target.closest('.readme-toggle')) return;
+                    const idx = card.dataset.index;
+                    const readmeEl = document.getElementById(`readme-${idx}`);
+                    const toggleEl = card.querySelector('.readme-toggle');
+                    if (!readmeEl) return;
+
+                    if (card.classList.contains('expanded')) {
+                        card.classList.remove('expanded');
+                        readmeEl.style.display = 'none';
+                        if (toggleEl) toggleEl.innerHTML = '<span>▶</span> README preview';
+                    } else {
+                        card.classList.add('expanded');
+                        readmeEl.style.display = 'block';
+                        if (toggleEl) toggleEl.innerHTML = '<span>▼</span> Hide README';
+                        loadReadme(card.dataset.repo, idx);
+                    }
+                });
+            });
+
+            repoGrid.querySelectorAll('.readme-toggle').forEach(toggle => {
+                toggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const idx = toggle.dataset.index;
+                    const readmeEl = document.getElementById(`readme-${idx}`);
+                    const card = toggle.closest('.repo-card');
+                    if (!readmeEl || !card) return;
+
+                    if (card.classList.contains('expanded')) {
+                        card.classList.remove('expanded');
+                        readmeEl.style.display = 'none';
+                        toggle.innerHTML = '<span>▶</span> README preview';
+                    } else {
+                        card.classList.add('expanded');
+                        readmeEl.style.display = 'block';
+                        toggle.innerHTML = '<span>▼</span> Hide README';
+                        loadReadme(toggle.dataset.repo, idx);
+                    }
+                });
+            });
+        }
+
+        async function loadReadme(fullName, index) {
+            const readmeEl = document.getElementById(`readme-${index}`);
+            if (!readmeEl || readmeEl.dataset.loaded === 'true') return;
+
+            try {
+                const [owner, repo] = fullName.split('/');
+                const data = await fetchGitHub(`repos/${owner}/${repo}/readme`);
+                const content = decodeBase64(data.content);
+                const html = marked.parse(content, { breaks: true, headerIds: false, mangle: false });
+                readmeEl.innerHTML = html;
+                readmeEl.dataset.loaded = 'true';
+            } catch (err) {
+                readmeEl.innerHTML = `<div class="readme-loading text-red-400">README unavailable: ${err.message}</div>`;
+            }
+        }
+
+        function decodeBase64(base64) {
+            const text = atob(base64.replace(/\n/g, ''));
+            return text;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         // --- ACTIVITY FEED ---
