@@ -1263,46 +1263,6 @@
             }
         }
 
-        const PROXY_BASE = "https://ishuin-nim-proxy.vercel.app";
-
-        async function callAI(prompt, systemPrompt) {
-            const url = `${PROXY_BASE}/api/chat`;
-            try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: prompt, system: systemPrompt }),
-                    signal: controller.signal,
-                });
-                clearTimeout(timeoutId);
-
-                if (!response.ok) throw new Error('API Error');
-                const data = await response.json();
-                const text = (data && (data.text || data.message || data.response || data.content)) || "";
-                if (!text || !text.trim()) throw new Error('Empty response');
-                return text.trim();
-            } catch (error) {
-                console.error(error);
-                return "OFFLINE";
-            }
-        }
-
-        const RESUME_SCOPE = `
-        Only answer questions about:
-        - Ishu Kumar's experience, roles, companies, and career timeline
-        - Tech stack: Python, Django, FastAPI, Azure, AWS, Terraform, Kubernetes, MCP, RAG, OpenAI
-        - Leadership, team size, delivery ownership, incident response
-        - Projects, impact metrics, outcomes
-        - FDE / forward-deployed engineer fit: customer ownership, production incidents, enterprise engagement
-        - Resume download and contact email
-
-        If the question is outside this scope, respond exactly with:
-        OUT_OF_SCOPE
-        `;
-
         function localReply(text) {
             const q = text.toLowerCase();
 
@@ -1355,6 +1315,13 @@
             if (e.key === 'Enter') sendChat();
         }
 
+        function scopeResponse(raw) {
+            if (raw === "OUT_OF_SCOPE") {
+                return "That is outside the current scope. For anything beyond Ishu's resume, experience, stack, and projects, please email ishu.kumars@gmail.com directly.";
+            }
+            return raw;
+        }
+
         async function sendChat() {
             const input = document.getElementById('chat-input');
             const history = document.getElementById('chat-history');
@@ -1363,7 +1330,7 @@
 
             history.innerHTML += `
                 <div class="chat-message">
-                    <span class="chat-user">visitor@portfolio:~$</span> ${userText}
+                    <span class="chat-user">visitor@portfolio:~$</span> ${escapeHtml(userText)}
                 </div>
             `;
             input.value = '';
@@ -1379,16 +1346,11 @@
             `;
             container.scrollTop = container.scrollHeight;
 
-            const response = await callAI(userText, RESUME_SCOPE);
-            const isOffline = response === "OFFLINE";
             const fallback = localReply(userText);
-            const finalResponse = isOffline ? fallback : response;
-            const safeResponse = finalResponse === "OUT_OF_SCOPE"
-                ? "That is outside the current scope. For anything beyond Ishu's resume, experience, stack, and projects, please email ishu.kumars@gmail.com directly."
-                : finalResponse;
+            const finalResponse = scopeResponse(fallback);
 
             document.getElementById(loaderId).innerHTML = `
-                <span class="chat-ai">ishu_ai:</span> <span class="text-gray-300">${marked.parseInline(safeResponse)}</span>
+                <span class="chat-ai">ishu_ai:</span> <span class="text-gray-300">${marked.parseInline(finalResponse)}</span>
             `;
             container.scrollTop = container.scrollHeight;
         }
