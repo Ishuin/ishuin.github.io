@@ -577,8 +577,7 @@
             </h1>
 
             <h2 class="reveal text-4xl md:text-6xl font-bold tracking-tight text-gray-300 leading-[1.1] mb-8">
-                Forward-deployed engineer building the systems that <br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">power intelligence.</span>
+                Building backend systems and AI infrastructure at scale.
             </h2>
 
             <p class="reveal text-xl text-gray-400 max-w-2xl leading-relaxed mb-12">
@@ -630,29 +629,29 @@
         </div>
     </div>
 
-    <!-- FDE Signal Row -->
+    <!-- Backend / AI Signal Row -->
     <section class="py-16 px-6 max-w-6xl mx-auto">
         <div class="grid md:grid-cols-3 gap-6 reveal">
             <div class="spotlight-card p-6 rounded-xl">
                 <div class="flex items-center gap-3 mb-3">
-                    <i data-feather="users" class="text-blue-500 w-5 h-5"></i>
-                    <h4 class="text-lg font-bold text-white">Customer-Facing Delivery</h4>
+                    <i data-feather="server" class="text-blue-500 w-5 h-5"></i>
+                    <h4 class="text-lg font-bold text-white">Backend Systems</h4>
                 </div>
-                <p class="text-sm text-gray-500">Direct enterprise customer engagement: requirement translation, production troubleshooting, deployment support, and cross-team technical demos.</p>
+                <p class="text-sm text-gray-500">Production backend work in Python/Django/FastAPI, with emphasis on reliability, API design, and long-term maintainability.</p>
             </div>
             <div class="spotlight-card p-6 rounded-xl">
                 <div class="flex items-center gap-3 mb-3">
-                    <i data-feather="shield" class="text-green-500 w-5 h-5"></i>
-                    <h4 class="text-lg font-bold text-white">Production Ownership</h4>
+                    <i data-feather="cloud" class="text-green-500 w-5 h-5"></i>
+                    <h4 class="text-lg font-bold text-white">Cloud Infrastructure</h4>
                 </div>
-                <p class="text-sm text-gray-500">End-to-end production responsibility: architecture decisions, migrations, observability, incident response, rollback/recovery, and cost optimization.</p>
+                <p class="text-sm text-gray-500">Deep experience with AWS, Azure, Terraform, and Kubernetes across hybrid-cloud platforms and serverless migrations.</p>
             </div>
             <div class="spotlight-card p-6 rounded-xl">
                 <div class="flex items-center gap-3 mb-3">
                     <i data-feather="cpu" class="text-purple-500 w-5 h-5"></i>
-                    <h4 class="text-lg font-bold text-white">AI Systems Builder</h4>
+                    <h4 class="text-lg font-bold text-white">Applied AI</h4>
                 </div>
-                <p class="text-sm text-gray-500">Built and shipped AI agents, MCP integrations, RAG pipelines, multi-agent orchestration, and LLM-backed workflows in production.</p>
+                <p class="text-sm text-gray-500">Building real AI features: MCP integrations, RAG pipelines, and LLM-backed workflows used in production settings.</p>
             </div>
         </div>
     </section>
@@ -671,7 +670,7 @@
                     I believe in <strong class="text-white">boring technology for critical paths</strong> and <strong class="text-white">cutting-edge innovation for competitive advantage</strong>. My current focus is "AI as Infrastructure"—treating LLMs not as magic, but as deterministic components in a larger system.
                 </p>
                 <p class="text-gray-400 leading-relaxed mt-4">
-                    As a <span class="text-white">Forward Deployed Engineer</span>, I work directly with enterprise customers to translate requirements into production designs, own migrations, support deployments, and drive incidents through resolution—from architecture review to live rollout.
+                    I operate across architecture, production migration, and applied AI: translating complex requirements into reliable systems, owning rollout risk, and reducing incident impact across large-scale environments.
                 </p>
             </div>
             
@@ -729,7 +728,6 @@
                         <li class="border border-white/10 px-2 py-1 rounded">Python</li>
                         <li class="border border-white/10 px-2 py-1 rounded">System Design</li>
                         <li class="border border-white/10 px-2 py-1 rounded">Event-Driven</li>
-                        <li class="border border-white/10 px-2 py-1 rounded">FDE</li>
                     </ul>
                 </div>
             </div>
@@ -1251,7 +1249,7 @@
             const q = text.toLowerCase();
 
             if (/(hello|hi|hey|greet|who are you|introduce)/.test(q)) {
-                return "Hey — I am Ishu's Digital Twin. Ask me about experience, stack, leadership, projects, or FDE fit.";
+                return "Hey — I am Ishu's Digital Twin. Ask me about backend systems, cloud infrastructure, applied AI, projects, or leadership.";
             }
             if (/(experience|years|background|career|profile|about you|timeline)/.test(q)) {
                 return "I am Ishu Kumar, a Technical Lead & Systems Architect with 6+ years across Deloitte, CloudBolt, Kumolus, and a current stealth role. I specialize in Python, Azure/AWS, and AI/cloud infrastructure.";
@@ -1268,9 +1266,6 @@
             if (/(lead|leadership|team|manager|management|mentor)/.test(q)) {
                 return "I currently lead a team of 6 engineers. I focus on delivery ownership, incident reduction, and translating business constraints into reliable technical roadmaps.";
             }
-            if (/(fde|forward deployed|customer|field|on-site|client|success)/.test(q)) {
-                return "I operate as a forward-deployed engineer: I own customer outcomes, not just tickets. That means production ownership, faster incident response, and direct engagement with enterprise users.";
-            }
             if (/(project|built|shipped|delivered|impact|metric|result|achievement)/.test(q)) {
                 return "Concrete outcomes: 15M+ end-user migration, 40% downtime reduction, 25% faster incident response, and about $3,000/month cloud savings per customer.";
             }
@@ -1278,7 +1273,7 @@
                 return "You can download my resume from this site. It covers roles, impact, and current focus.";
             }
             if (/(contact|email|reach|hire|opportunity|offer)/.test(q)) {
-                return "Best contact is email: ishu.kumars@gmail.com. I am open to technical leadership, backend, and FDE-oriented opportunities.";
+                return "Best contact is email: ishu.kumars@gmail.com. I am open to technical leadership, backend, and AI/cloud opportunities.";
             }
             if (/(location|remote|relocate|city|country|timezone|india|usa|based)/.test(q)) {
                 return "I am based in India and open to remote collaboration. For location-specific or relocation-specific opportunities, email is the fastest path.";
