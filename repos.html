@@ -655,7 +655,7 @@
             const hasTopics = topics.length > 0;
 
             return `
-            <div class="repo-card" data-repo="${repo.full_name}" data-owner="${(repo.owner && repo.owner.login) || ''}">
+            <div class="reveal repo-card" data-repo="${repo.full_name}" data-owner="${(repo.owner && repo.owner.login) || ''}">
                 <a href="${repo.html_url}" target="_blank" class="block group" onclick="event.stopPropagation()">
                     <div class="flex items-start justify-between gap-4">
                         <div class="flex-1 min-w-0">
@@ -737,6 +737,9 @@
             grid.innerHTML = filtered.map(repo => cardHTML(repo)).join('');
             feather.replace();
             attachCardListeners();
+
+            // Re-observe newly rendered cards for scroll reveal
+            document.querySelectorAll('#repo-grid .reveal:not(.visible)').forEach(el => observer.observe(el));
         }
 
         function attachCardListeners() {
