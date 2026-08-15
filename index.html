@@ -1269,7 +1269,7 @@
             const url = `${PROXY_BASE}/api/chat`;
             try {
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 8000);
+                const timeoutId = setTimeout(() => controller.abort(), 5000);
 
                 const response = await fetch(url, {
                     method: 'POST',
@@ -1281,49 +1281,74 @@
 
                 if (!response.ok) throw new Error('API Error');
                 const data = await response.json();
-                return data.text || "Connection interrupted. Try again.";
+                const text = (data && (data.text || data.message || data.response || data.content)) || "";
+                if (!text || !text.trim()) throw new Error('Empty response');
+                return text.trim();
             } catch (error) {
                 console.error(error);
                 return "OFFLINE";
             }
         }
 
+        const RESUME_SCOPE = `
+        Only answer questions about:
+        - Ishu Kumar's experience, roles, companies, and career timeline
+        - Tech stack: Python, Django, FastAPI, Azure, AWS, Terraform, Kubernetes, MCP, RAG, OpenAI
+        - Leadership, team size, delivery ownership, incident response
+        - Projects, impact metrics, outcomes
+        - FDE / forward-deployed engineer fit: customer ownership, production incidents, enterprise engagement
+        - Resume download and contact email
+
+        If the question is outside this scope, respond exactly with:
+        OUT_OF_SCOPE
+        `;
+
         function localReply(text) {
             const q = text.toLowerCase();
-            if (/(experience|years|background|who are you|about you)/.test(q)) {
-                return "I am Ishu Kumar, a Technical Lead & Systems Architect with 6+ years across CloudBolt, Kumolus, and Deloitte. I specialize in Python, Azure/AWS, and AI/cloud infrastructure.";
+
+            if (/(hello|hi|hey|greet|who are you|introduce)/.test(q)) {
+                return "Hey — I am Ishu's Digital Twin. Ask me about experience, stack, leadership, projects, or FDE fit.";
             }
-            if (/(cloud|aws|azure|terraform|kubernetes|k8s)/.test(q)) {
+            if (/(experience|years|background|career|profile|about you|timeline)/.test(q)) {
+                return "I am Ishu Kumar, a Technical Lead & Systems Architect with 6+ years across Deloitte, CloudBolt, Kumolus, and a current stealth role. I specialize in Python, Azure/AWS, and AI/cloud infrastructure.";
+            }
+            if (/(cloud|aws|azure|terraform|kubernetes|k8s|infrastructure)/.test(q)) {
                 return "My core cloud stack is Azure, AWS, Terraform, and Kubernetes. At CloudBolt I managed hybrid cloud operations, and I am now re-architecting an e-commerce platform as serverless event-driven systems on Azure.";
             }
-            if (/(ai|mcp|rag|openai|gpt|llm|model context)/.test(q)) {
+            if (/(ai|mcp|rag|openai|gpt|llm|model context|agent)/.test(q)) {
                 return "I build applied AI systems. At Kumolus I led MCP integration in an Oracle AI optimizer, and I regularly work with RAG, OpenAI, and agent-based architectures.";
             }
-            if (/(python|django|fastapi|backend)/.test(q)) {
+            if (/(python|django|fastapi|backend|api)/.test(q)) {
                 return "Python is my primary backend language. I have production experience with Django and FastAPI, plus automation work at Deloitte that cut manual effort by 90%.";
             }
-            if (/(lead|leadership|team|manager|management)/.test(q)) {
+            if (/(lead|leadership|team|manager|management|mentor)/.test(q)) {
                 return "I currently lead a team of 6 engineers. I focus on delivery ownership, incident reduction, and translating business constraints into reliable technical roadmaps.";
             }
-            if (/(fde|forward deployed|customer|field|on-site|client)/.test(q)) {
+            if (/(fde|forward deployed|customer|field|on-site|client|success)/.test(q)) {
                 return "I operate as a forward-deployed engineer: I own customer outcomes, not just tickets. That means production ownership, faster incident response, and direct engagement with enterprise users.";
             }
-            if (/(project|built|shipped|delivered|impact|metric|result)/.test(q)) {
-                return "A few concrete outcomes: 15M+ end-user migration, 40% downtime reduction, 25% faster incident response, and about $3,000/month cloud savings per customer.";
+            if (/(project|built|shipped|delivered|impact|metric|result|achievement)/.test(q)) {
+                return "Concrete outcomes: 15M+ end-user migration, 40% downtime reduction, 25% faster incident response, and about $3,000/month cloud savings per customer.";
             }
             if (/(resume|cv|pdf|download)/.test(q)) {
                 return "You can download my resume from this site. It covers roles, impact, and current focus.";
             }
-            if (/(contact|email|reach|hire|opportunity)/.test(q)) {
+            if (/(contact|email|reach|hire|opportunity|offer)/.test(q)) {
                 return "Best contact is email: ishu.kumars@gmail.com. I am open to technical leadership, backend, and FDE-oriented opportunities.";
             }
-            if (/(hello|hi|hey|greet)/.test(q)) {
-                return "Hey — I am Ishu's Digital Twin. Ask me about experience, stack, leadership, or projects.";
-            }
-            if (/(location|remote|relocate|city|country|timezone|india|usa)/.test(q)) {
+            if (/(location|remote|relocate|city|country|timezone|india|usa|based)/.test(q)) {
                 return "I am based in India and open to remote collaboration. For location-specific or relocation-specific opportunities, email is the fastest path.";
             }
-            return "I am running in offline mode right now. For anything detailed, email me at ishu.kumars@gmail.com and I will respond directly.";
+            if (/(stack|skills|tools|tech|technology|languages)/.test(q)) {
+                return "Key skills: Python, Django, FastAPI, AWS, Azure, Terraform, Kubernetes, MCP, RAG, OpenAI. I favor backend and cloud/AI infrastructure over frontend.";
+            }
+            if (/(education|degree|college|university|study)/.test(q)) {
+                return "I do not highlight education separately on this site. My focus is on production systems, delivery outcomes, and applied AI/cloud engineering.";
+            }
+            if (/(salary|compensation|expectation|notice|available)/.test(q)) {
+                return "For role-specific details like expectations, availability, or compensation, please reach out directly at ishu.kumars@gmail.com.";
+            }
+            return "OUT_OF_SCOPE";
         }
 
         function handleChat(e) {
@@ -1342,7 +1367,7 @@
                 </div>
             `;
             input.value = '';
-            
+
             const container = document.getElementById('terminal-content');
             container.scrollTop = container.scrollHeight;
 
@@ -1354,11 +1379,16 @@
             `;
             container.scrollTop = container.scrollHeight;
 
-            const response = await callAI(userText, resumeContext);
+            const response = await callAI(userText, RESUME_SCOPE);
             const isOffline = response === "OFFLINE";
-            const finalResponse = isOffline ? localReply(userText) : response;
+            const fallback = localReply(userText);
+            const finalResponse = isOffline ? fallback : response;
+            const safeResponse = finalResponse === "OUT_OF_SCOPE"
+                ? "That is outside the current scope. For anything beyond Ishu's resume, experience, stack, and projects, please email ishu.kumars@gmail.com directly."
+                : finalResponse;
+
             document.getElementById(loaderId).innerHTML = `
-                <span class="chat-ai">ishu_ai:</span> <span class="text-gray-300">${marked.parseInline(finalResponse)}</span>
+                <span class="chat-ai">ishu_ai:</span> <span class="text-gray-300">${marked.parseInline(safeResponse)}</span>
             `;
             container.scrollTop = container.scrollHeight;
         }
