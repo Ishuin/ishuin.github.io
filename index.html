@@ -838,7 +838,6 @@
             </div>
             <div class="flex gap-4 mt-4 md:mt-0">
                 <button onclick="switchTab('chat')" id="btn-chat" class="px-4 py-2 text-sm font-mono rounded bg-blue-600 text-white transition-colors">./chat_with_ishu.sh</button>
-                <button onclick="switchTab('audit')" id="btn-audit" class="px-4 py-2 text-sm font-mono rounded border border-white/10 text-gray-400 hover:text-white hover:bg-white/5 transition-colors">./system_audit.py</button>
             </div>
         </div>
 
@@ -872,23 +871,7 @@
                     </div>
                 </div>
 
-                <!-- Audit Mode Content (Hidden) -->
-                <div id="view-audit" class="hidden h-full flex flex-col">
-                    <div class="flex-1 space-y-4 overflow-y-auto" id="audit-result">
-                        <div class="chat-message">
-                            <span class="chat-ai">system:</span> 
-                            <span class="text-purple-500">Architecture Review Protocol loaded.</span><br>
-                            <span class="text-gray-400">Paste a code snippet, describing a bottleneck, or ask for a pattern recommendation. I will provide a high-level architectural critique.</span>
-                        </div>
-                    </div>
-                    <div class="mt-4 border-t border-white/10 pt-4">
-                        <div class="flex gap-2">
-                            <span class="text-purple-500 font-mono pt-1">>></span>
-                            <textarea id="audit-input" class="bg-transparent border-none outline-none text-white flex-1 font-mono text-sm resize-none h-16" placeholder="Describe your system problem (e.g., 'My Postgres query is slow on large joins...')" onkeypress="handleAudit(event)"></textarea>
-                            <button onclick="sendAudit()" class="h-10 self-end text-xs bg-purple-600 hover:bg-purple-500 px-4 py-1 rounded text-white transition-colors font-bold">ANALYZE ✨</button>
-                        </div>
-                    </div>
-                </div>
+                <!-- Audit Mode Removed -->
             </div>
         </div>
     </section>
@@ -1243,23 +1226,13 @@
         // --- AI LAB (Gemini) ---
         function switchTab(tab) {
             const btnChat = document.getElementById('btn-chat');
-            const btnAudit = document.getElementById('btn-audit');
             const viewChat = document.getElementById('view-chat');
-            const viewAudit = document.getElementById('view-audit');
             const title = document.getElementById('terminal-title');
 
             if (tab === 'chat') {
                 btnChat.className = 'px-4 py-2 text-sm font-mono rounded bg-blue-600 text-white transition-colors';
-                btnAudit.className = 'px-4 py-2 text-sm font-mono rounded border border-white/10 text-gray-400 hover:text-white hover:bg-white/5 transition-colors';
                 viewChat.classList.remove('hidden');
-                viewAudit.classList.add('hidden');
                 title.innerText = 'ishu_digital_twin — ssh session';
-            } else {
-                btnAudit.className = 'px-4 py-2 text-sm font-mono rounded bg-purple-600 text-white transition-colors';
-                btnChat.className = 'px-4 py-2 text-sm font-mono rounded border border-white/10 text-gray-400 hover:text-white hover:bg-white/5 transition-colors';
-                viewAudit.classList.remove('hidden');
-                viewChat.classList.add('hidden');
-                title.innerText = 'system_architect_protocol — analysis';
             }
         }
 
@@ -1395,6 +1368,50 @@
                 <span class="text-purple-500 font-mono">>> Analysis:</span> 
                 <span class="text-white block mt-1 pl-4 border-l-2 border-purple-500/50">${isOffline ? 'AI analysis offline — email <a href="mailto:ishu.kumars@gmail.com" class="text-blue-400 underline">ishu.kumars@gmail.com</a>.' : marked.parseInline(response)}</span>
             `;
+        }
+
+        function handleChat(e) {
+            if (e.key === 'Enter') sendChat();
+        }
+
+        function scopeResponse(raw) {
+            if (raw === "OUT_OF_SCOPE") {
+                return "That is outside the current scope. For anything beyond Ishu's resume, experience, stack, and projects, please email ishu.kumars@gmail.com directly.";
+            }
+            return raw;
+        }
+
+        async function sendChat() {
+            const input = document.getElementById('chat-input');
+            const history = document.getElementById('chat-history');
+            const userText = input.value.trim();
+            if (!userText) return;
+
+            history.innerHTML += `
+                <div class="chat-message">
+                    <span class="chat-user">visitor@portfolio:~$</span> ${escapeHtml(userText)}
+                </div>
+            `;
+            input.value = '';
+
+            const container = document.getElementById('terminal-content');
+            container.scrollTop = container.scrollHeight;
+
+            const loaderId = `loader-${Date.now()}`;
+            history.innerHTML += `
+                <div class="chat-message" id="${loaderId}">
+                    <span class="chat-ai">ishu_ai:</span> <span class="loader inline-block"><span></span><span></span><span></span></span>
+                </div>
+            `;
+            container.scrollTop = container.scrollHeight;
+
+            const fallback = localReply(userText);
+            const finalResponse = scopeResponse(fallback);
+
+            document.getElementById(loaderId).innerHTML = `
+                <span class="chat-ai">ishu_ai:</span> <span class="text-gray-300">${marked.parseInline(finalResponse)}</span>
+            `;
+            container.scrollTop = container.scrollHeight;
         }
 
         // --- INIT ---
