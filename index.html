@@ -1004,7 +1004,7 @@
                         <div class="chat-message">
                             <span class="chat-ai">system:</span> 
                             <span class="text-green-500">Local twin active.</span><br>
-                            <span class="text-gray-400">I am Ishu's Digital Twin. Ask me about experience, cloud/AI work, leadership, or projects.</span>
+                            <span class="text-gray-400">I am Ishu's Digital Twin. Ask me about Attiv AI, experience, cloud/AI work, leadership, or projects.</span>
                         </div>
                     </div>
                     <div class="mt-4 flex items-center border-t border-white/10 pt-4">
@@ -1394,34 +1394,46 @@
             const q = text.toLowerCase();
 
             if (/(hello|hi|hey|greet|who are you|introduce)/.test(q)) {
-                return "Hey — I am Ishu's Digital Twin. Ask me about backend systems, cloud infrastructure, applied AI, projects, or leadership.";
+                return "Hey. I am Ishu's Digital Twin. Ask me about Attiv AI, backend systems, cloud infrastructure, applied AI, projects, or leadership.";
+            }
+            if (/(attiv|studio|what do you build|what attiv builds|agency)/.test(q)) {
+                return "Attiv AI designs and builds practical software, AI systems, and automations that take real business work from problem to production. Every engagement produces something that ships: deployed, monitored, and operational. See attivai.in.";
+            }
+            if (/(how do you work|how does attiv work|process|approach|method|deliver)/.test(q)) {
+                return "We diagnose, architect, build, deploy. Every engagement starts with understanding the actual problem, then we architect a solution that fits the real-world context: the team size, the infrastructure, the timeline, and the operational reality.";
+            }
+            if (/(start|hire|engage|work with you|work with us|with attiv|project assessment|scope|book|meeting|build with)/.test(q)) {
+                return "Bring us a product idea, business bottleneck, existing system or AI prototype. We will help define what should be built and how to take it to production. Start a project assessment at attivai.in/contact.";
+            }
+            if (/(oversight|human|approval|approve|control|ownership|lock-in|own the|review)/.test(q)) {
+                return "You stay in control. Attiv AI builds systems your team can own, modify, and extend, and documents everything as it goes. Systems are deployed, monitored, and run in the real world: if it does not work in production, it does not work.";
             }
             if (/(experience|years|background|career|profile|about you|timeline)/.test(q)) {
-                return "I am Ishu Kumar, a Technical Lead & Systems Architect with 6+ years across Deloitte, CloudBolt, Kumolus, and a current stealth role. I specialize in Python, Azure/AWS, and AI/cloud infrastructure.";
+                return "I am Ishu Kumar, founder of Attiv AI, with 6+ years as an engineer and technical lead across Deloitte, CloudBolt, and enterprise platform teams. I specialize in Python, Azure/AWS, and AI/cloud infrastructure.";
             }
             if (/(cloud|aws|azure|terraform|kubernetes|k8s|infrastructure)/.test(q)) {
-                return "My core cloud stack is Azure, AWS, Terraform, and Kubernetes. At CloudBolt I managed hybrid cloud operations, and I am now re-architecting an e-commerce platform as serverless event-driven systems on Azure.";
+                return "My core cloud stack is Azure, AWS, Terraform, and Kubernetes. At CloudBolt I managed hybrid cloud operations, and I led the re-architecture of an e-commerce platform into serverless event-driven systems on Azure.";
             }
             if (/(ai|mcp|rag|openai|gpt|llm|model context|agent)/.test(q)) {
-                return "I build applied AI systems. At Kumolus I led MCP integration in an Oracle AI optimizer, and I regularly work with RAG, OpenAI, and agent-based architectures.";
+                return "I build applied AI systems. I led MCP integration in an Oracle AI optimizer, and I regularly work with RAG, OpenAI, and agent-based architectures.";
             }
             if (/(python|django|fastapi|backend|api)/.test(q)) {
                 return "Python is my primary backend language. I have production experience with Django and FastAPI, plus automation work at Deloitte that cut manual effort by 90%.";
             }
             if (/(lead|leadership|team|manager|management|mentor)/.test(q)) {
-                return "I currently lead a team of 6 engineers. I focus on delivery ownership, incident reduction, and translating business constraints into reliable technical roadmaps.";
+                return "I led a team of 6 engineers on the e-commerce platform re-architecture, with focus on delivery ownership, incident reduction, and translating business constraints into reliable technical roadmaps.";
             }
             if (/(project|built|shipped|delivered|impact|metric|result|achievement)/.test(q)) {
                 return "Concrete outcomes: 15M+ end-user migration, 40% downtime reduction, 25% faster incident response, and about $3,000/month cloud savings per customer.";
             }
             if (/(resume|cv|pdf|download)/.test(q)) {
-                return "You can download my resume from this site. It covers roles, impact, and current focus.";
+                return "There is no resume download on this site anymore. The work above and github.com/Ishuin cover the details, and Zocept is live at zocept.com.";
             }
             if (/(contact|email|reach|hire|opportunity|offer)/.test(q)) {
-                return "Best contact is email: ishu.kumars@gmail.com. I am open to technical leadership, backend, and AI/cloud opportunities.";
+                return "Best contact path: attivai.in/contact. Bring a product idea, business bottleneck, existing system or AI prototype, and Attiv AI will define what should be built.";
             }
             if (/(location|remote|relocate|city|country|timezone|india|usa|based)/.test(q)) {
-                return "I am based in India and open to remote collaboration. For location-specific or relocation-specific opportunities, email is the fastest path.";
+                return "Attiv AI is based in India and works with remote clients. For anything location specific, use attivai.in/contact.";
             }
             if (/(stack|skills|tools|tech|technology|languages)/.test(q)) {
                 return "Key skills: Python, Django, FastAPI, AWS, Azure, Terraform, Kubernetes, MCP, RAG, OpenAI. I favor backend and cloud/AI infrastructure over frontend.";
@@ -1430,7 +1442,7 @@
                 return "I do not highlight education separately on this site. My focus is on production systems, delivery outcomes, and applied AI/cloud engineering.";
             }
             if (/(salary|compensation|expectation|notice|available)/.test(q)) {
-                return "For role-specific details like expectations, availability, or compensation, please reach out directly at ishu.kumars@gmail.com.";
+                return "This site is not about hiring me for a role. If you want to build something with Attiv AI, start a project assessment at attivai.in/contact.";
             }
             return "OUT_OF_SCOPE";
         }
@@ -1441,7 +1453,7 @@
 
         function scopeResponse(raw) {
             if (raw === "OUT_OF_SCOPE") {
-                return "That is outside the current scope. For anything beyond Ishu's resume, experience, stack, and projects, please email ishu.kumars@gmail.com directly.";
+                return "That is outside the scope of this twin. Ask about Attiv AI, experience, stack, or projects, or reach out at attivai.in/contact.";
             }
             return raw;
         }
