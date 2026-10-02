@@ -11,7 +11,7 @@
     <!-- Feather Icons -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
     <!-- Markdown Parser -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
@@ -20,8 +20,19 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
+                        sans: ['Geist', 'system-ui', 'sans-serif'],
+                        mono: ['Geist Mono', 'ui-monospace', 'monospace'],
+                        serif: ['Instrument Serif', 'Georgia', 'serif'],
+                    },
+                    colors: {
+                        blue: {
+                            400: '#7dede1',
+                            500: '#62e6d8',
+                            600: '#3fc9bb',
+                            900: 'rgba(98, 230, 216, 0.16)',
+                        },
+                        mint: { DEFAULT: '#62e6d8', 400: '#7dede1', 600: '#3fc9bb' },
+                        human: '#ffb547',
                     },
                 }
             }
@@ -30,23 +41,89 @@
 
     <style>
         :root {
-            --bg-body: #050505;
-            --bg-card: #0a0a0a;
-            --border-color: rgba(255, 255, 255, 0.18);
+            --bg-body: #08080c;
+            --bg-card: #0c0c13;
+            --border-color: rgba(255, 255, 255, 0.16);
             --text-main: #ededed;
             --text-muted: #a1a1aa;
-            --accent-blue: #3b82f6;
+            --accent-blue: #62e6d8;
             --accent-purple: #8b5cf6;
             --accent-green: #10b981;
-            --accent-glow: rgba(59, 130, 246, 0.25);
+            --accent-glow: rgba(98, 230, 216, 0.25);
+            --amber-human: #ffb547;
+            --font-sans: 'Geist', system-ui, sans-serif;
+            --font-mono: 'Geist Mono', ui-monospace, monospace;
+            --font-serif: 'Instrument Serif', Georgia, serif;
+            color-scheme: dark;
         }
 
         body {
             background-color: var(--bg-body);
             color: var(--text-main);
-            font-family: 'Inter', sans-serif;
+            font-family: var(--font-sans);
             overflow-x: hidden;
             cursor: none;
+        }
+
+        /* --- Attiv Mint Button System --- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 13px 26px;
+            min-height: 48px;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.82rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            white-space: nowrap;
+            transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s, border-color 0.3s, color 0.3s;
+        }
+        .btn:active { transform: translateY(1px); }
+        .btn-primary {
+            color: #04120f;
+            background: #62e6d8;
+            box-shadow: 0 10px 30px rgba(98, 230, 216, 0.18);
+        }
+        .btn-primary:hover {
+            background: #7dede1;
+            box-shadow: 0 14px 36px rgba(98, 230, 216, 0.28);
+        }
+        .btn-ghost {
+            color: #e7e7ea;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .btn-ghost:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        .btn-human {
+            color: #1a1206;
+            background: var(--amber-human);
+            box-shadow: 0 10px 30px rgba(255, 181, 71, 0.16);
+        }
+        .btn-human:hover { background: #ffc76b; }
+        .serif-accent {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-weight: 400;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+            .reveal, .reveal-stagger {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+            .texture-overlay, .animate-ping { animation: none !important; }
         }
 
         /* --- Custom Cursor --- */
@@ -73,7 +150,7 @@
         .cursor-ring.hover {
             width: 48px; height: 48px;
             border-color: var(--accent-blue);
-            background: rgba(59,130,246,0.08);
+            background: rgba(98,230,216,0.10);
         }
 
         /* --- Animated Background Layers --- */
@@ -177,7 +254,7 @@
         .spotlight-card:hover {
             border-color: rgba(255, 255, 255, 0.7);
             transform: translateY(-3px);
-            box-shadow: 8px 8px 0 rgba(59,130,246,0.15);
+            box-shadow: 8px 8px 0 rgba(98,230,216,0.16);
         }
 
         /* --- Typography & Utilities --- */
@@ -222,7 +299,7 @@
             background: #0d0d0d;
             border: 2px solid rgba(255, 255, 255, 0.35);
             box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.8);
-            font-family: 'JetBrains Mono', monospace;
+            font-family: 'Geist Mono', monospace;
         }
 
         .terminal-header {
@@ -274,7 +351,7 @@
         .repo-card:hover {
             border-color: rgba(255,255,255,0.7);
             transform: translateY(-3px);
-            box-shadow: 8px 8px 0 rgba(59,130,246,0.12);
+            box-shadow: 8px 8px 0 rgba(98,230,216,0.14);
         }
         .repo-card.expanded {
             border-color: rgba(255,255,255,0.8);
@@ -306,7 +383,7 @@
             border: 1px solid rgba(255,255,255,0.12);
             color: var(--text-muted);
             background: rgba(255,255,255,0.02);
-            font-family: 'JetBrains Mono', monospace;
+            font-family: 'Geist Mono', monospace;
             letter-spacing: 0.04em;
         }
 
@@ -339,7 +416,7 @@
             background: rgba(255,255,255,0.06);
             padding: 0.15rem 0.4rem;
             border-radius: 0.25rem;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: 'Geist Mono', monospace;
         }
         .repo-readme pre {
             background: rgba(0,0,0,0.5);
@@ -391,7 +468,7 @@
             letter-spacing: 0.06em;
         }
         .readme-toggle:hover {
-            color: #60a5fa;
+            color: #7dede1;
         }
         .readme-loading {
             font-size: 0.75rem;
@@ -927,6 +1004,16 @@
         // Init Feather Icons
         feather.replace();
 
+        // --- Motion Preference ---
+        const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (REDUCED_MOTION) {
+            document.body.style.cursor = 'auto';
+            ['cursor-dot', 'cursor-ring'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = 'none';
+            });
+        }
+
         // --- Dynamic Year ---
         document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -1453,7 +1540,7 @@
             }
             requestAnimationFrame(animateCursorRing);
         }
-        if (window.matchMedia('(pointer: fine)').matches) {
+        if (window.matchMedia('(pointer: fine)').matches && !REDUCED_MOTION) {
             animateCursorRing();
         } else if (cursorDot && cursorRing) {
             cursorDot.style.display = 'none';
@@ -1475,6 +1562,7 @@
         const gridBg = document.querySelector('.grid-bg');
 
         document.addEventListener('mousemove', (e) => {
+            if (REDUCED_MOTION) return;
             const xRatio = (e.clientX / window.innerWidth - 0.5);
             const yRatio = (e.clientY / window.innerHeight - 0.5);
             if (orb1) orb1.style.transform = `translate(${xRatio * 40}px, ${yRatio * 40}px)`;
@@ -1484,6 +1572,7 @@
         });
 
         window.addEventListener('scroll', () => {
+            if (REDUCED_MOTION) return;
             const scrollY = window.scrollY;
             if (orb1) orb1.style.transform = `translateY(${scrollY * 0.04}px)`;
             if (orb2) orb2.style.transform = `translateY(${scrollY * -0.03}px)`;
